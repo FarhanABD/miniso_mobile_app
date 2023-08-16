@@ -1,7 +1,7 @@
 // ignore_for_file: duplicate_import
-
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/widgets/auth_widgets.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
@@ -51,7 +51,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
     }
   }
 
-  //--------- FUNCTION TO PISK IMAGE FROM GALLERY ----------------------------//
+  //--------- FUNCTION TO PICK IMAGE FROM GALLERY ----------------------------//
 
   void pickImageFromGallery() async {
     try {
@@ -70,6 +70,44 @@ class _CustomerRegisterState extends State<CustomerRegister> {
       print(pickedImageError);
     }
   }
+
+  //--------------- FUNCTION SIGN UP ----------------------------------------//
+  void signUp() async {
+    if (formkey.currentState!.validate()) {
+      if (imageFile != null) {
+        //----- TRY BLOCK UNTUK AUTENTIKASI EMAIL USER BARU YG TERDAFTAR --//
+        try {
+          await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: password);
+          print("Image Picked");
+          print('Valid');
+          print(name);
+          print(email);
+          print(password);
+          formkey.currentState!.reset();
+          setState(() {
+            imageFile = null;
+          });
+          Navigator.pushReplacementNamed(context, '/customer_home');
+        } on FirebaseAuthException
+        //------------ CATCH BLOK UNTUK ERROR MESSAGE EMAIL TERDAFTAR --------//
+        catch (e) {
+          if (e.code == 'weak-password') {
+            MyMessageHandler.showSnackbar(
+                scaffoldKey, "The password is too weak");
+          } else if (e.code == 'email-already-in-use') {
+            MyMessageHandler.showSnackbar(
+                scaffoldKey, "The Email already exist");
+          }
+        }
+      } else {
+        MyMessageHandler.showSnackbar(scaffoldKey, " Please Pick Image First");
+      }
+    } else {
+      MyMessageHandler.showSnackbar(scaffoldKey, " Please fill all fields");
+    }
+  }
+  //======================== ENDS OF SIGN UP FUNCTION ========================//
 
   @override
   Widget build(BuildContext context) {
@@ -241,26 +279,8 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       //---------- REUSABLE SIGN UP BUTTON WIDGET ----------------//
                       AuthMainButton(
                         mainButtonLabel: "Sign Up",
-                        onPressed: () {
-                          if (formkey.currentState!.validate()) {
-                            if (imageFile != null) {
-                              print("Image Picked");
-                              print('Valid');
-                              print(name);
-                              print(email);
-                              print(password);
-                              formkey.currentState!.reset();
-                              setState(() {
-                                imageFile = null;
-                              });
-                            } else {
-                              MyMessageHandler.showSnackbar(
-                                  scaffoldKey, " Please Pick Image First");
-                            }
-                          } else {
-                            MyMessageHandler.showSnackbar(
-                                scaffoldKey, " Please fill all fields");
-                          }
+                        onPressed: () async {
+                          signUp();
                         },
                       ),
                     ],
