@@ -1,12 +1,14 @@
 // ignore_for_file: duplicate_import
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/widgets/auth_widgets.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class CustomerRegister extends StatefulWidget {
   const CustomerRegister({Key? key}) : super(key: key);
@@ -19,6 +21,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   late String name;
   late String email;
   late String password;
+  late String profileImage;
+  late String customerId;
+  bool processing = false;
   //--------- KEY FOR VALIDATOR MESSAGE OF TEXTFIELD ------------------------//
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> scaffoldKey =
@@ -32,6 +37,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
 
   XFile? imageFile;
   dynamic pickedImageError;
+
+  CollectionReference customer =
+      FirebaseFirestore.instance.collection('customer');
 
   void pickImageFromCamera() async {
     try {
@@ -73,37 +81,65 @@ class _CustomerRegisterState extends State<CustomerRegister> {
 
   //--------------- FUNCTION SIGN UP ----------------------------------------//
   void signUp() async {
+    setState(() {
+      processing = true;
+    });
     if (formkey.currentState!.validate()) {
       if (imageFile != null) {
         //----- TRY BLOCK UNTUK AUTENTIKASI EMAIL USER BARU YG TERDAFTAR --//
         try {
           await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password);
-          print("Image Picked");
-          print('Valid');
-          print(name);
-          print(email);
-          print(password);
+
+          firebase_storage.Reference ref = firebase_storage
+              .FirebaseStorage.instance
+              .ref('cust-images/$email.jpg');
+
+          await ref.putFile(File(imageFile!.path));
+          customerId = FirebaseAuth.instance.currentUser!.uid;
+
+          profileImage = await ref.getDownloadURL();
+          await customer.doc(customerId).set({
+            'name': name,
+            'email': email,
+            'profileimage': profileImage,
+            'phone': '',
+            'address': '',
+            'cid': customerId,
+          });
           formkey.currentState!.reset();
           setState(() {
             imageFile = null;
           });
+
           Navigator.pushReplacementNamed(context, '/customer_home');
         } on FirebaseAuthException
         //------------ CATCH BLOK UNTUK ERROR MESSAGE EMAIL TERDAFTAR --------//
         catch (e) {
           if (e.code == 'weak-password') {
+            setState(() {
+              processing == false;
+            });
             MyMessageHandler.showSnackbar(
                 scaffoldKey, "The password is too weak");
           } else if (e.code == 'email-already-in-use') {
+            setState(() {
+              processing == false;
+            });
             MyMessageHandler.showSnackbar(
                 scaffoldKey, "The Email already exist");
           }
         }
       } else {
+        setState(() {
+          processing == false;
+        });
         MyMessageHandler.showSnackbar(scaffoldKey, " Please Pick Image First");
       }
     } else {
+      setState(() {
+        processing == false;
+      });
       MyMessageHandler.showSnackbar(scaffoldKey, " Please fill all fields");
     }
   }
@@ -277,12 +313,14 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                         onPressed: () {},
                       ),
                       //---------- REUSABLE SIGN UP BUTTON WIDGET ----------------//
-                      AuthMainButton(
-                        mainButtonLabel: "Sign Up",
-                        onPressed: () async {
-                          signUp();
-                        },
-                      ),
+                      processing == true
+                          ? const CircularProgressIndicator()
+                          : AuthMainButton(
+                              mainButtonLabel: "Sign Up",
+                              onPressed: () async {
+                                signUp();
+                              },
+                            ),
                     ],
                   ),
                 ),
