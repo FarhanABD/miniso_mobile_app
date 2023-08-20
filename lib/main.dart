@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
+import 'package:miniso_store/auth/customer_sign_in.dart';
 import 'package:miniso_store/auth/customer_sign_up.dart';
 import 'package:miniso_store/main_screen/customer_home.dart';
 import 'package:miniso_store/main_screen/supplier_home.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/customer_home': (context) => const CustomerHomeScreen(),
         '/supplier_home': (context) => const SupplierHomeScreen(),
         '/customer_signup': (context) => const CustomerRegister(),
+        '/customer_signin': (context) => const CustomerLogin(),
       },
     );
   }

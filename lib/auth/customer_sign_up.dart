@@ -310,7 +310,10 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       HaveAccount(
                         haveAccount: "Already Have Account ?",
                         actionLabel: "Log In",
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, 'customer_signin');
+                        },
                       ),
                       //---------- REUSABLE SIGN UP BUTTON WIDGET ----------------//
                       processing == true
