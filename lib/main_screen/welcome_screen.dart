@@ -142,14 +142,17 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 label: 'Login',
                                 onPressed: () {
                                   Navigator.pushReplacementNamed(
-                                      context, "/supplier_home");
+                                      context, "/supplier_signin");
                                 },
                                 width: 0.25),
                             Padding(
                               padding: const EdgeInsets.only(right: 8),
                               child: YellowButton(
                                   label: 'Signup',
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, "/supplier_signup");
+                                  },
                                   width: 0.25),
                             ),
                           ],
@@ -240,7 +243,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 Icons.person,
                                 size: 55,
                                 color: Colors.pinkAccent,
-                              )),
+                              ),
+                            ),
                     ],
                   ),
                 ),

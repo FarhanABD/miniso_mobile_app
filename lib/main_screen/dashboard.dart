@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/dashboard_components/edit_store.dart';
 import 'package:miniso_store/dashboard_components/manage_product.dart';
@@ -5,6 +6,7 @@ import 'package:miniso_store/dashboard_components/my_store.dart';
 import 'package:miniso_store/dashboard_components/suppliers_balance.dart';
 import 'package:miniso_store/dashboard_components/suppliers_order.dart';
 import 'package:miniso_store/dashboard_components/suppliers_statics.dart';
+import 'package:miniso_store/widgets/alert_dialog.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
 
 //---------- LIST LABEL PADA HALAMAN DASHBOARD SUPPLIERS -------//
@@ -50,7 +52,18 @@ class DashboardScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/welcome_screen');
+              MyAlertDialog.showMyDialog(
+                  context: context,
+                  titles: 'Logout',
+                  content: 'Are You Sure Want To Logout?',
+                  tabNo: () {
+                    Navigator.pop(context);
+                  },
+                  tabYes: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pop(context);
+                    Navigator.pushReplacementNamed(context, '/welcome_screen');
+                  });
             },
             icon: const Icon(
               Icons.logout,

@@ -10,19 +10,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class CustomerRegister extends StatefulWidget {
-  const CustomerRegister({Key? key}) : super(key: key);
+class SuppliersRegister extends StatefulWidget {
+  const SuppliersRegister({Key? key}) : super(key: key);
 
   @override
-  State<CustomerRegister> createState() => _CustomerRegisterState();
+  State<SuppliersRegister> createState() => _SuppliersRegisterState();
 }
 
-class _CustomerRegisterState extends State<CustomerRegister> {
-  late String name;
+class _SuppliersRegisterState extends State<SuppliersRegister> {
+  late String storeName;
   late String email;
   late String password;
-  late String profileImage;
-  late String customerId;
+  late String storeLogo;
+  late String supplierId;
   bool processing = false;
   //--------- KEY FOR VALIDATOR MESSAGE OF TEXTFIELD ------------------------//
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
@@ -38,8 +38,8 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   XFile? imageFile;
   dynamic pickedImageError;
 
-  CollectionReference customer =
-      FirebaseFirestore.instance.collection('customer');
+  CollectionReference suppliers =
+      FirebaseFirestore.instance.collection('suppliers');
 
   void pickImageFromCamera() async {
     try {
@@ -96,23 +96,22 @@ class _CustomerRegisterState extends State<CustomerRegister> {
               .ref('cust-images/$email.jpg');
 
           await ref.putFile(File(imageFile!.path));
-          customerId = FirebaseAuth.instance.currentUser!.uid;
+          supplierId = FirebaseAuth.instance.currentUser!.uid;
 
-          profileImage = await ref.getDownloadURL();
-          await customer.doc(customerId).set({
-            'name': name,
+          storeLogo = await ref.getDownloadURL();
+          await suppliers.doc(supplierId).set({
+            'storename': storeName,
             'email': email,
-            'profileimage': profileImage,
+            'storelogo': storeLogo,
             'phone': '',
-            'address': '',
-            'cid': customerId,
+            'sid': supplierId,
           });
           formkey.currentState!.reset();
           setState(() {
             imageFile = null;
           });
 
-          Navigator.pushReplacementNamed(context, '/customer_signin');
+          Navigator.pushReplacementNamed(context, '/supplier_signin');
         } on FirebaseAuthException
         //------------ CATCH BLOK UNTUK ERROR MESSAGE EMAIL TERDAFTAR --------//
         catch (e) {
@@ -235,7 +234,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                             return null;
                           },
                           onChanged: (value) {
-                            name = value;
+                            storeName = value;
                           },
                           // controller: nameController,
                           decoration: textFormDecoration.copyWith(
@@ -312,7 +311,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                         actionLabel: "Log In",
                         onPressed: () {
                           Navigator.pushReplacementNamed(
-                              context, 'customer_signin');
+                              context, "/supplier_signin");
                         },
                       ),
                       //---------- REUSABLE SIGN UP BUTTON WIDGET ----------------//

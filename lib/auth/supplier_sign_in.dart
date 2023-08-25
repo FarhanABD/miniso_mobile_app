@@ -6,14 +6,14 @@ import 'package:miniso_store/widgets/auth_widgets.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 
-class CustomerLogin extends StatefulWidget {
-  const CustomerLogin({Key? key}) : super(key: key);
+class SuppliersLogin extends StatefulWidget {
+  const SuppliersLogin({Key? key}) : super(key: key);
 
   @override
-  State<CustomerLogin> createState() => _CustomerLoginState();
+  State<SuppliersLogin> createState() => _SuppliersLoginState();
 }
 
-class _CustomerLoginState extends State<CustomerLogin> {
+class _SuppliersLoginState extends State<SuppliersLogin> {
   late String email;
   late String password;
 
@@ -38,7 +38,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
             .signInWithEmailAndPassword(email: email, password: password);
         formkey.currentState!.reset();
 
-        Navigator.pushReplacementNamed(context, '/customer_home');
+        Navigator.pushReplacementNamed(context, '/supplier_home');
       } on FirebaseAuthException
       //------------ CATCH BLOK UNTUK ERROR MESSAGE EMAIL TERDAFTAR --------//
       catch (e) {
@@ -151,7 +151,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
 
                       TextButton(
                           onPressed: () {},
-                          child: Text(
+                          child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
                                 fontSize: 18, fontStyle: FontStyle.italic),
@@ -164,7 +164,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
                         actionLabel: "Sign Up",
                         onPressed: () {
                           Navigator.pushReplacementNamed(
-                              context, '/customer_signup');
+                              context, '/supplier_signup');
                         },
                       ),
                       //---------- REUSABLE SIGN UP BUTTON WIDGET ----------------//

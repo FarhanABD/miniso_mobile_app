@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:miniso_store/auth/customer_sign_in.dart';
 import 'package:miniso_store/auth/customer_sign_up.dart';
+import 'package:miniso_store/auth/supplier_sign_in.dart';
+import 'package:miniso_store/auth/supplier_sign_up.dart';
 import 'package:miniso_store/main_screen/customer_home.dart';
 import 'package:miniso_store/main_screen/supplier_home.dart';
 import 'package:miniso_store/main_screen/welcome_screen.dart';
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
         '/supplier_home': (context) => const SupplierHomeScreen(),
         '/customer_signup': (context) => const CustomerRegister(),
         '/customer_signin': (context) => const CustomerLogin(),
+        '/supplier_signup': (context) => const SuppliersRegister(),
+        '/supplier_signin': (context) => const SuppliersLogin(),
       },
     );
   }
