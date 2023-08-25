@@ -69,19 +69,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: const EdgeInsets.only(top: 25, left: 30),
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                  radius: 50,
-                                  backgroundImage:
-                                      NetworkImage(data['profileimage'])),
-                              // const CircleAvatar(
-                              //   radius: 50,
-                              //   backgroundImage:
-                              //       AssetImage("images/inapp/guest.jpg"),
-                              // ),
+                              data['profileimage'] == ''
+                                  ? const CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage:
+                                          AssetImage("images/inapp/guest.jpg"),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage:
+                                          NetworkImage(data['profileimage'])),
                               Padding(
                                 padding: const EdgeInsets.only(left: 25),
                                 child: Text(
-                                  data['name'].toUpperCase(),
+                                  data['name'] == ''
+                                      ? 'guest'.toUpperCase
+                                      : data['name'].toUpperCase(),
                                   style: const TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w600),
@@ -234,19 +237,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   children: [
                                     RepeatedListTile(
                                       title: "Email Address",
-                                      subtitle: data['email'],
+                                      subtitle: data['email'] == ''
+                                          ? 'example@gmail.com'
+                                          : data['email'],
                                       icon: Icons.email,
                                     ),
                                     PinkDivider(),
                                     RepeatedListTile(
-                                      title: data['phone'],
+                                      title: data['phone'] == ''
+                                          ? '+62000000'
+                                          : data['phone'],
                                       subtitle: "+62 xxx xxx",
                                       icon: Icons.phone,
                                     ),
                                     PinkDivider(),
                                     RepeatedListTile(
                                       title: "Address",
-                                      subtitle: data['address'],
+                                      subtitle: data['address'] == ''
+                                          ? '21 Jump Street'
+                                          : data['address'],
                                       icon: Icons.location_pin,
                                     ),
                                   ],

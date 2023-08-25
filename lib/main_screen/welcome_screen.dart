@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/main_screen/dashboard.dart';
@@ -34,6 +35,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   //-------------- CIRCULAR PROGRESS INDICATOR -------------------------------//
   bool processing = false;
+
+  CollectionReference customer =
+      FirebaseFirestore.instance.collection('customer');
+
+  late String customerId;
 
   @override
   void initState() {
@@ -235,7 +241,21 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 setState(() {
                                   processing = true;
                                 });
-                                await FirebaseAuth.instance.signInAnonymously();
+                                await FirebaseAuth.instance
+                                    .signInAnonymously()
+                                    .whenComplete(() async {
+                                  customerId =
+                                      FirebaseAuth.instance.currentUser!.uid;
+                                  await customer.doc(customerId).set({
+                                    'name': 'name',
+                                    'email': 'email',
+                                    'profileimage': 'profileImage',
+                                    'phone': '',
+                                    'address': '',
+                                    'cid': customerId,
+                                  });
+                                });
+
                                 Navigator.pushReplacementNamed(
                                     context, '/customer_home');
                               },
