@@ -12,6 +12,26 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
+
+//------- VARIABLES FOR EACH TEXTFIELD --------------------------------------//
+  late double price;
+  late int quantity;
+  late String prodName;
+  late String prodDesc;
+
+  void uploadProduct() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      print('Valid');
+      print(price);
+      print(quantity);
+      print(prodName);
+      print(prodDesc);
+    } else {
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Please fill all fields');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
@@ -61,6 +81,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                             }
                             return null;
                           },
+                          onSaved: (value) {
+                            price = double.parse(value!);
+                          },
                           keyboardType: const TextInputType.numberWithOptions(
                               decimal: true),
                           decoration: textFormDecoration.copyWith(
@@ -84,6 +107,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                             }
                             return null;
                           },
+                          onSaved: (value) {
+                            quantity = int.parse(value!);
+                          },
                           keyboardType: TextInputType.number,
                           decoration: textFormDecoration.copyWith(
                             labelText: "Quantity",
@@ -104,6 +130,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                             }
                             return null;
                           },
+                          onSaved: (value) {
+                            prodName = value!;
+                          },
                           maxLength: 100,
                           maxLines: 3,
                           decoration: textFormDecoration.copyWith(
@@ -121,9 +150,12 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                       child: TextFormField(
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please Eneter Product Description';
+                              return 'Please Enter Product Description';
                             }
                             return null;
+                          },
+                          onSaved: (value) {
+                            prodDesc = value!;
                           },
                           maxLength: 800,
                           maxLines: 5,
@@ -153,12 +185,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             ),
             FloatingActionButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  print('Valid');
-                } else {
-                  MyMessageHandler.showSnackbar(
-                      _scaffoldKey, 'Please fill all fields');
-                }
+                uploadProduct();
               },
               backgroundColor: Colors.pinkAccent,
               child: const Icon(Icons.upload, color: Colors.white),
