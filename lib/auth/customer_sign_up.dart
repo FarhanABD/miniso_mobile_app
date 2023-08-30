@@ -112,7 +112,8 @@ class _CustomerRegisterState extends State<CustomerRegister> {
             imageFile = null;
           });
 
-          Navigator.pushReplacementNamed(context, '/customer_signin');
+          Navigator.pushReplacementNamed(context, "/customer_signin");
+          //Navigator.pushNamed(context, "/customer_signin");
         } on FirebaseAuthException
         //------------ CATCH BLOK UNTUK ERROR MESSAGE EMAIL TERDAFTAR --------//
         catch (e) {

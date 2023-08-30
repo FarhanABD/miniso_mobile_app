@@ -161,7 +161,7 @@ class _SuppliersRegisterState extends State<SuppliersRegister> {
                   child: Column(
                     children: [
                       const AuthHeaderLabel(
-                        headerLabel: "Sign Up",
+                        headerLabel: "Supplier Sign Up",
                       ),
                       Row(
                         children: [

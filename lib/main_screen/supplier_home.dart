@@ -3,6 +3,7 @@ import 'package:miniso_store/main_screen/category.dart';
 import 'package:miniso_store/main_screen/dashboard.dart';
 import 'package:miniso_store/main_screen/home.dart';
 import 'package:miniso_store/main_screen/stores.dart';
+import 'package:miniso_store/main_screen/upload_products.dart';
 
 class SupplierHomeScreen extends StatefulWidget {
   const SupplierHomeScreen({Key? key}) : super(key: key);
@@ -18,9 +19,7 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
     CategoryScreen(),
     StoreScreen(),
     DashboardScreen(),
-    Center(
-      child: Text("Upload"),
-    ),
+    UploadProductScreen(),
   ];
   @override
   Widget build(BuildContext context) {
