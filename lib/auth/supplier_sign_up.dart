@@ -1,10 +1,10 @@
-// ignore_for_file: duplicate_import
+// ignore_for_file: duplicate_import, unused_import
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/widgets/auth_widgets.dart';
+import 'package:miniso_store/widgets/categ_widget.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
@@ -24,6 +24,7 @@ class _SuppliersRegisterState extends State<SuppliersRegister> {
   late String storeLogo;
   late String supplierId;
   bool processing = false;
+
   //--------- KEY FOR VALIDATOR MESSAGE OF TEXTFIELD ------------------------//
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> scaffoldKey =
@@ -81,9 +82,9 @@ class _SuppliersRegisterState extends State<SuppliersRegister> {
 
   //--------------- FUNCTION SIGN UP ----------------------------------------//
   void signUp() async {
-    setState(() {
-      processing = true;
-    });
+    // setState(() {
+    //   processing = true;
+    // });
     if (formkey.currentState!.validate()) {
       if (imageFile != null) {
         //----- TRY BLOCK UNTUK AUTENTIKASI EMAIL USER BARU YG TERDAFTAR --//

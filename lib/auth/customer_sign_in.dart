@@ -16,7 +16,6 @@ class CustomerLogin extends StatefulWidget {
 class _CustomerLoginState extends State<CustomerLogin> {
   late String email;
   late String password;
-
   bool processing = false;
   //--------- KEY FOR VALIDATOR MESSAGE OF TEXTFIELD ------------------------//
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
@@ -151,7 +150,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
 
                       TextButton(
                           onPressed: () {},
-                          child: Text(
+                          child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
                                 fontSize: 18, fontStyle: FontStyle.italic),

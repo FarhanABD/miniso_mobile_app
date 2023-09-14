@@ -79,7 +79,7 @@ class AuthHeaderLabel extends StatelessWidget {
           Text(
             headerLabel,
             style: const TextStyle(
-                fontSize: 40,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic),
           ),

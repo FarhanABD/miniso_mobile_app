@@ -1,4 +1,10 @@
+// ignore_for_file: unused_import
+
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 
 class UploadProductScreen extends StatefulWidget {
@@ -19,14 +25,65 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late String prodName;
   late String prodDesc;
 
+//--------- FUNCTION IMAGE PICKER -------------------------------------------//
+  final ImagePicker picker = ImagePicker();
+
+  List<XFile>? imagesFileList = [];
+  dynamic pickedImageError;
+
+  void pickProductImages() async {
+    try {
+      final pickedImages = await picker.pickMultiImage(
+          maxHeight: 300, maxWidth: 300, imageQuality: 95);
+      setState(() {
+        imagesFileList = pickedImages;
+      });
+    } catch (e) {
+      setState(() {
+        pickedImageError = e;
+      });
+      print(pickedImageError);
+    }
+  }
+
+//-------------- WIDGET UNTUK PREVIEW IMAGES ITEMS -------------------------//
+  Widget previewImages() {
+    if (imagesFileList!.isNotEmpty) {
+      return ListView.builder(
+        itemCount: imagesFileList!.length,
+        itemBuilder: (context, index) {
+          return Image.file(File(imagesFileList![index].path));
+        },
+      );
+    } else {
+      return const Center(
+        child: Text(
+          "You Have Not \n \n Picked Image Yet",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16),
+        ),
+      );
+    }
+  }
+  //=============== ENDS OF WIDGET PREVIEW IMAGES ============================//
+
   void uploadProduct() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print('Valid');
-      print(price);
-      print(quantity);
-      print(prodName);
-      print(prodDesc);
+      if (imagesFileList!.isNotEmpty) {
+        print('images picked');
+        print('Valid');
+        print(price);
+        print(quantity);
+        print(prodName);
+        print(prodDesc);
+        setState(() {
+          imagesFileList = [];
+        });
+        _formKey.currentState!.reset();
+      } else {
+        MyMessageHandler.showSnackbar(_scaffoldKey, 'Please pick images first');
+      }
     } else {
       MyMessageHandler.showSnackbar(_scaffoldKey, 'Please fill all fields');
     }
@@ -52,13 +109,15 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                         color: Colors.blueGrey.shade100,
                         height: MediaQuery.of(context).size.width * 0.5,
                         width: MediaQuery.of(context).size.width * 0.5,
-                        child: const Center(
-                          child: Text(
-                            "You Have Not \n \n Picked Image Yet",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
+                        child: imagesFileList != null
+                            ? previewImages()
+                            : const Center(
+                                child: Text(
+                                  "You Have Not \n \n Picked Image Yet",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
                       ),
                     ],
                   ),
@@ -178,9 +237,24 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: imagesFileList!.isEmpty
+                    ? () {
+                        pickProductImages();
+                      }
+                    : () {
+                        setState(() {
+                          imagesFileList = [];
+                        });
+                      },
+                //---- FUNGSI PENGECEKAN UNTUK MEMPROSES ICONS JIKA USER MENEKAN
+                // ICON HAPUS IMAGE ------------------------------------------//
                 backgroundColor: Colors.pinkAccent,
-                child: const Icon(Icons.photo_library, color: Colors.white),
+                child: imagesFileList!.isEmpty
+                    ? const Icon(Icons.photo_library, color: Colors.white)
+                    : const Icon(
+                        Icons.delete_forever,
+                        color: Colors.white,
+                      ),
               ),
             ),
             FloatingActionButton(
@@ -227,5 +301,3 @@ extension PriceValidator on String {
   }
 }
 //=============== ENDS OF REGULAR EXPRESSION VALIDATOR PRICE PRODUCT =========//
-
-
