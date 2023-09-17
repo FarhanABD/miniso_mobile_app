@@ -7,6 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 
+List<String> categ = [
+  'men',
+  'women',
+  'shoes',
+  'bags',
+];
+
+List<String> categMen = [
+  'shirt',
+  'jacket',
+  'shoes',
+  'jeans',
+];
+
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({Key? key}) : super(key: key);
 
@@ -24,6 +38,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late int quantity;
   late String prodName;
   late String prodDesc;
+  String mainCategValue = 'men';
+  String subCategValue = 'shirt';
 
 //--------- FUNCTION IMAGE PICKER -------------------------------------------//
   final ImagePicker picker = ImagePicker();
@@ -119,6 +135,41 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                 ),
                               ),
                       ),
+                      //------------ COLUMN DROPDOWN CATEGORY ----------------//
+                      Column(
+                        children: [
+                          const Text("select main category"),
+                          DropdownButton(
+                            value: mainCategValue,
+                            items: categ.map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem(
+                                  child: Text(value), value: value);
+                            }).toList(),
+                            onChanged: (String? value) {
+                              print(value);
+                              setState(() {
+                                mainCategValue = value!;
+                              });
+                            },
+                          ),
+                          const Text("select sub category"),
+                          DropdownButton(
+                            value: subCategValue,
+                            items:
+                                categMen.map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem(
+                                  child: Text(value), value: value);
+                            }).toList(),
+                            onChanged: (String? value) {
+                              print(value);
+                              setState(() {
+                                subCategValue = value!;
+                              });
+                            },
+                          )
+                        ],
+                      )
+                      //=========== ENDS OF COLUMN DROPDOWN CATEGORY =========//
                     ],
                   ),
                   const SizedBox(
