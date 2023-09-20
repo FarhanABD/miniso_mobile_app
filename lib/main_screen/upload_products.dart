@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 
 List<String> categ = [
+  'select category',
   'men',
   'women',
   'shoes',
@@ -15,10 +16,35 @@ List<String> categ = [
 ];
 
 List<String> categMen = [
+  'subcategory',
   'shirt',
   'jacket',
   'shoes',
   'jeans',
+];
+
+List<String> categWomen = [
+  'subcategory'
+      'w shirt',
+  'w jacket',
+  'w shoes',
+  'w jeans',
+];
+
+List<String> categShoes = [
+  'subcategory',
+  's shirt',
+  's jacket',
+  's shoes',
+  's jeans',
+];
+
+List<String> categBags = [
+  'subcategory',
+  'B shirt',
+  'B jacket',
+  'B shoes',
+  'B jeans',
 ];
 
 class UploadProductScreen extends StatefulWidget {
@@ -38,8 +64,9 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late int quantity;
   late String prodName;
   late String prodDesc;
-  String mainCategValue = 'men';
-  String subCategValue = 'shirt';
+  String mainCategValue = 'select category';
+  String subCategValue = 'subcategory';
+  List<String> subCategList = [];
 
 //--------- FUNCTION IMAGE PICKER -------------------------------------------//
   final ImagePicker picker = ImagePicker();
@@ -146,17 +173,29 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   child: Text(value), value: value);
                             }).toList(),
                             onChanged: (String? value) {
+                              if (value == 'men') {
+                                setState(() {
+                                  subCategValue = 'shirt';
+                                });
+                                subCategList = categMen;
+                              } else if (value == 'women') {
+                                setState(() {
+                                  subCategValue = 'w shirt';
+                                });
+                                subCategList = categWomen;
+                              }
                               print(value);
                               setState(() {
                                 mainCategValue = value!;
+                                subCategValue = 'subcategory';
                               });
                             },
                           ),
                           const Text("select sub category"),
                           DropdownButton(
                             value: subCategValue,
-                            items:
-                                categMen.map<DropdownMenuItem<String>>((value) {
+                            items: subCategList
+                                .map<DropdownMenuItem<String>>((value) {
                               return DropdownMenuItem(
                                   child: Text(value), value: value);
                             }).toList(),
