@@ -24,8 +24,8 @@ List<String> categMen = [
 ];
 
 List<String> categWomen = [
-  'subcategory'
-      'w shirt',
+  'subcategory',
+  'w shirt',
   'w jacket',
   'w shoes',
   'w jeans',
@@ -149,7 +149,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                   Row(
                     children: [
                       Container(
-                        color: Colors.blueGrey.shade100,
+                        color: Color.fromARGB(255, 250, 165, 193),
                         height: MediaQuery.of(context).size.width * 0.5,
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: imagesFileList != null
@@ -165,12 +165,19 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                       //------------ COLUMN DROPDOWN CATEGORY ----------------//
                       Column(
                         children: [
-                          const Text("select main category"),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text("select main category"),
+                          ),
                           DropdownButton(
                             value: mainCategValue,
                             items: categ.map<DropdownMenuItem<String>>((value) {
                               return DropdownMenuItem(
-                                  child: Text(value), value: value);
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Text(value),
+                                  ),
+                                  value: value);
                             }).toList(),
                             onChanged: (String? value) {
                               if (value == 'men') {
@@ -191,13 +198,20 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                               });
                             },
                           ),
-                          const Text("select sub category"),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text("select sub category"),
+                          ),
                           DropdownButton(
                             value: subCategValue,
                             items: subCategList
                                 .map<DropdownMenuItem<String>>((value) {
                               return DropdownMenuItem(
-                                  child: Text(value), value: value);
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: Text(value),
+                                  ),
+                                  value: value);
                             }).toList(),
                             onChanged: (String? value) {
                               print(value);
