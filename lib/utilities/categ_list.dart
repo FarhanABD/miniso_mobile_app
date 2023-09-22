@@ -1,4 +1,5 @@
 List<String> maincateg = [
+  'select category',
   'men',
   'women',
   'electronics',
@@ -11,6 +12,7 @@ List<String> maincateg = [
 ];
 
 List<String> men = [
+  'subcategory',
   'shirt',
   't-shirt',
   'jacket',
@@ -22,6 +24,7 @@ List<String> men = [
   'other',
 ];
 List<String> women = [
+  'subcategory',
   'dress',
   '2pcs sets',
   't-shirt',

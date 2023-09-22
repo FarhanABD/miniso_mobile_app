@@ -1,51 +1,10 @@
 // ignore_for_file: unused_import
-
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:miniso_store/utilities/categ_list.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
-
-List<String> categ = [
-  'select category',
-  'men',
-  'women',
-  'shoes',
-  'bags',
-];
-
-List<String> categMen = [
-  'subcategory',
-  'shirt',
-  'jacket',
-  'shoes',
-  'jeans',
-];
-
-List<String> categWomen = [
-  'subcategory',
-  'w shirt',
-  'w jacket',
-  'w shoes',
-  'w jeans',
-];
-
-List<String> categShoes = [
-  'subcategory',
-  's shirt',
-  's jacket',
-  's shoes',
-  's jeans',
-];
-
-List<String> categBags = [
-  'subcategory',
-  'B shirt',
-  'B jacket',
-  'B shoes',
-  'B jeans',
-];
 
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({Key? key}) : super(key: key);
@@ -110,6 +69,38 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   }
   //=============== ENDS OF WIDGET PREVIEW IMAGES ============================//
 
+  //-------------- VOID DROPDOWN SELECTED MAIN CATEGORY ----------------------//
+  void selectedMainCateg(String? value) {
+    if (value == 'select category') {
+      subCategList == [];
+    } else if (value == 'men') {
+      subCategList = men;
+    } else if (value == 'women') {
+      subCategList = women;
+    } else if (value == 'electronics') {
+      subCategList = electronics;
+    } else if (value == 'accessories') {
+      subCategList = accessories;
+    } else if (value == 'shoes') {
+      subCategList = shoes;
+    } else if (value == 'home & garden') {
+      subCategList = homeandgarden;
+    } else if (value == 'beauty') {
+      subCategList = beauty;
+    } else if (value == 'kids') {
+      subCategList = kids;
+    } else if (value == 'bags') {
+      subCategList = bags;
+    }
+    print(value);
+    setState(() {
+      mainCategValue = value!;
+      subCategValue = 'subcategory';
+    });
+  }
+  //========== ENDS OF VOID DROPDOWN SELECTED MAIN CATEGORY ==================//
+
+  //------------------------- VOID FUNGSI UPLOAD PRODUCT ---------------------//
   void uploadProduct() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -131,6 +122,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
       MyMessageHandler.showSnackbar(_scaffoldKey, 'Please fill all fields');
     }
   }
+  //================== ENDS OF VOID FUNGSI UPLOAD PRODUCTS ===================//
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +163,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                           ),
                           DropdownButton(
                             value: mainCategValue,
-                            items: categ.map<DropdownMenuItem<String>>((value) {
+                            items: maincateg
+                                .map<DropdownMenuItem<String>>((value) {
                               return DropdownMenuItem(
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 20),
@@ -180,22 +173,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   value: value);
                             }).toList(),
                             onChanged: (String? value) {
-                              if (value == 'men') {
-                                setState(() {
-                                  subCategValue = 'shirt';
-                                });
-                                subCategList = categMen;
-                              } else if (value == 'women') {
-                                setState(() {
-                                  subCategValue = 'w shirt';
-                                });
-                                subCategList = categWomen;
-                              }
-                              print(value);
-                              setState(() {
-                                mainCategValue = value!;
-                                subCategValue = 'subcategory';
-                              });
+                              selectedMainCateg(value);
                             },
                           ),
                           const Padding(
@@ -203,6 +181,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                             child: Text("select sub category"),
                           ),
                           DropdownButton(
+                            disabledHint: const Text('select category'),
                             value: subCategValue,
                             items: subCategList
                                 .map<DropdownMenuItem<String>>((value) {
