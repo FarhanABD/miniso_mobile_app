@@ -102,30 +102,38 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
 
   //------------------------- VOID FUNGSI UPLOAD PRODUCT ---------------------//
   void uploadProduct() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      if (imagesFileList!.isNotEmpty) {
-        print('images picked');
-        print('Valid');
-        print(price);
-        print(quantity);
-        print(prodName);
-        print(prodDesc);
-        setState(() {
-          imagesFileList = [];
-        });
-        _formKey.currentState!.reset();
+    if (mainCategValue != 'select category' && subCategValue != 'subcategory') {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        if (imagesFileList!.isNotEmpty) {
+          print('images picked');
+          print('Valid');
+          print(price);
+          print(quantity);
+          print(prodName);
+          print(prodDesc);
+          setState(() {
+            imagesFileList = [];
+            mainCategValue = 'select category';
+            subCategValue = 'subcategory';
+          });
+          _formKey.currentState!.reset();
+        } else {
+          MyMessageHandler.showSnackbar(
+              _scaffoldKey, 'Please pick images first');
+        }
       } else {
-        MyMessageHandler.showSnackbar(_scaffoldKey, 'Please pick images first');
+        MyMessageHandler.showSnackbar(_scaffoldKey, 'Please fill all fields');
       }
     } else {
-      MyMessageHandler.showSnackbar(_scaffoldKey, 'Please fill all fields');
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Please select category');
     }
   }
   //================== ENDS OF VOID FUNGSI UPLOAD PRODUCTS ===================//
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return ScaffoldMessenger(
       key: _scaffoldKey,
       child: Scaffold(
@@ -142,8 +150,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                     children: [
                       Container(
                         color: Color.fromARGB(255, 250, 165, 193),
-                        height: MediaQuery.of(context).size.width * 0.5,
-                        width: MediaQuery.of(context).size.width * 0.5,
+                        height: size.width * 0.5,
+                        width: size.width * 0.5,
                         child: imagesFileList != null
                             ? previewImages()
                             : const Center(
@@ -155,51 +163,81 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                               ),
                       ),
                       //------------ COLUMN DROPDOWN CATEGORY ----------------//
-                      Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Text("select main category"),
-                          ),
-                          DropdownButton(
-                            value: mainCategValue,
-                            items: maincateg
-                                .map<DropdownMenuItem<String>>((value) {
-                              return DropdownMenuItem(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: Text(value),
-                                  ),
-                                  value: value);
-                            }).toList(),
-                            onChanged: (String? value) {
-                              selectedMainCateg(value);
-                            },
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Text("select sub category"),
-                          ),
-                          DropdownButton(
-                            disabledHint: const Text('select category'),
-                            value: subCategValue,
-                            items: subCategList
-                                .map<DropdownMenuItem<String>>((value) {
-                              return DropdownMenuItem(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 15),
-                                    child: Text(value),
-                                  ),
-                                  value: value);
-                            }).toList(),
-                            onChanged: (String? value) {
-                              print(value);
-                              setState(() {
-                                subCategValue = value!;
-                              });
-                            },
-                          )
-                        ],
+                      SizedBox(
+                        height: size.width * 0.5,
+                        width: size.width * 0.5,
+                        child: Column(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "* select main category",
+                                  style: TextStyle(color: Colors.pinkAccent),
+                                ),
+                                DropdownButton(
+                                  iconSize: 40,
+                                  iconEnabledColor: Colors.pink,
+                                  iconDisabledColor: Colors.black,
+                                  dropdownColor:
+                                      const Color.fromARGB(255, 238, 157, 185),
+                                  disabledHint:
+                                      const Text('select main category'),
+                                  value: mainCategValue,
+                                  items: maincateg
+                                      .map<DropdownMenuItem<String>>((value) {
+                                    return DropdownMenuItem(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
+                                          child: Text(value),
+                                        ),
+                                        value: value);
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    selectedMainCateg(value);
+                                  },
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                const Text(
+                                  "* select sub category",
+                                  style: TextStyle(color: Colors.pinkAccent),
+                                ),
+                                DropdownButton(
+                                  iconSize: 40,
+                                  iconEnabledColor: Colors.pink,
+                                  iconDisabledColor: Colors.black,
+                                  dropdownColor:
+                                      const Color.fromARGB(255, 238, 157, 185),
+                                  menuMaxHeight: 500,
+                                  disabledHint:
+                                      const Text('select sub category'),
+                                  value: subCategValue,
+                                  items: subCategList
+                                      .map<DropdownMenuItem<String>>((value) {
+                                    return DropdownMenuItem(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: Text(value),
+                                        ),
+                                        value: value);
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    print(value);
+                                    setState(() {
+                                      subCategValue = value!;
+                                    });
+                                  },
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       )
                       //=========== ENDS OF COLUMN DROPDOWN CATEGORY =========//
                     ],
