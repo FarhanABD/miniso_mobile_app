@@ -28,9 +28,9 @@ class _SuppliersLoginState extends State<SuppliersLogin> {
 
   //--------------- FUNCTION SIGN UP ----------------------------------------//
   void Login() async {
-    setState(() {
-      processing = true;
-    });
+    // setState(() {
+    //   processing = true;
+    // });
     if (formkey.currentState!.validate()) {
       //----- TRY BLOCK UNTUK AUTENTIKASI EMAIL USER BARU YG TERDAFTAR --//
       try {
