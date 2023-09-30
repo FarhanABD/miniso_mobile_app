@@ -1,10 +1,12 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, unused_local_variable
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miniso_store/utilities/categ_list.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart' as path;
 
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({Key? key}) : super(key: key);
@@ -31,6 +33,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   final ImagePicker picker = ImagePicker();
 
   List<XFile>? imagesFileList = [];
+  List<String> imagesUrlList = [];
   dynamic pickedImageError;
 
   void pickProductImages() async {
@@ -101,11 +104,27 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   //========== ENDS OF VOID DROPDOWN SELECTED MAIN CATEGORY ==================//
 
   //------------------------- VOID FUNGSI UPLOAD PRODUCT ---------------------//
-  void uploadProduct() {
+  void uploadProduct() async {
     if (mainCategValue != 'select category' && subCategValue != 'subcategory') {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         if (imagesFileList!.isNotEmpty) {
+          try {
+            for (var image in imagesFileList!) {
+              firebase_storage.Reference ref = firebase_storage
+                  .FirebaseStorage.instance
+                  .ref('products/${path.basename(image.path)}');
+
+              await ref.putFile(File(image.path)).whenComplete(() async {
+                await ref.getDownloadURL().then((value) {
+                  imagesUrlList.add(value);
+                });
+              });
+            }
+          } catch (e) {
+            print(e);
+          }
+
           print('images picked');
           print('Valid');
           print(price);
