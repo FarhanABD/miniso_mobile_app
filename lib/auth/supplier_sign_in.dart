@@ -138,9 +138,9 @@ class _SuppliersLoginState extends State<SuppliersLogin> {
                                   );
                                 },
                                 icon: Icon(
-                                  passwordVisible
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
+                                  passwordVisible == false
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
                                   color: Colors.pinkAccent,
                                 ),
                               ),

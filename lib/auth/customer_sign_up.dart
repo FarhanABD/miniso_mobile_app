@@ -295,9 +295,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                                   );
                                 },
                                 icon: Icon(
-                                  passwordVisible
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
+                                  passwordVisible == false
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
                                   color: Colors.pinkAccent,
                                 ),
                               ),

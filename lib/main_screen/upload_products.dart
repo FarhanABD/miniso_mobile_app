@@ -48,6 +48,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         pickedImageError = e;
       });
       print(pickedImageError);
+      print("Error Anjerr");
     }
   }
 

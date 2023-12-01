@@ -137,9 +137,9 @@ class _CustomerLoginState extends State<CustomerLogin> {
                                   );
                                 },
                                 icon: Icon(
-                                  passwordVisible
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
+                                  passwordVisible == false
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
                                   color: Colors.pinkAccent,
                                 ),
                               ),

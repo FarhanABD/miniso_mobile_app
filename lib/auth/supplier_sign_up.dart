@@ -82,9 +82,9 @@ class _SuppliersRegisterState extends State<SuppliersRegister> {
 
   //--------------- FUNCTION SIGN UP ----------------------------------------//
   void signUp() async {
-    // setState(() {
-    //   processing = true;
-    // });
+    setState(() {
+      processing = true;
+    });
     if (formkey.currentState!.validate()) {
       if (imageFile != null) {
         //----- TRY BLOCK UNTUK AUTENTIKASI EMAIL USER BARU YG TERDAFTAR --//
@@ -294,9 +294,9 @@ class _SuppliersRegisterState extends State<SuppliersRegister> {
                                   );
                                 },
                                 icon: Icon(
-                                  passwordVisible
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
+                                  passwordVisible == false
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
                                   color: Colors.pinkAccent,
                                 ),
                               ),
