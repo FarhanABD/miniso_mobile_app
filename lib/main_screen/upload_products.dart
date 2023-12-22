@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import, unused_local_variable
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miniso_store/utilities/categ_list.dart';
@@ -119,6 +120,21 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
               await ref.putFile(File(image.path)).whenComplete(() async {
                 await ref.getDownloadURL().then((value) {
                   imagesUrlList.add(value);
+                }).whenComplete(() async {
+                  CollectionReference productRef =
+                      FirebaseFirestore.instance.collection('products');
+
+                  await productRef.doc().set({
+                    'maincateg': mainCategValue,
+                    'subcateg': subCategValue,
+                    'price': price,
+                    'instock': quantity,
+                    'productname': prodName,
+                    'prodesc': prodDesc,
+                    'sid': FirebaseAuth.instance.currentUser!.uid,
+                    'proimages': imagesUrlList,
+                    'discount': 0,
+                  });
                 });
               });
             }
@@ -135,7 +151,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
           setState(() {
             imagesFileList = [];
             mainCategValue = 'select category';
-            subCategValue = 'subcategory';
+            // subCategValue = 'subcategory';
+            subCategList = [];
           });
           _formKey.currentState!.reset();
         } else {

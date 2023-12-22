@@ -69,25 +69,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: const EdgeInsets.only(top: 25, left: 30),
                           child: Row(
                             children: [
-                              data['profileimage'] == ''
-                                  ? const CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage:
-                                          AssetImage("images/inapp/guest.jpg"),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage:
-                                          NetworkImage(data['profileimage'])),
+                              ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints(maxWidth: 100),
+                                child: data['profileimage'] == ''
+                                    ? const CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage: AssetImage(
+                                            "images/inapp/guest.jpg"),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage:
+                                            NetworkImage(data['profileimage'])),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 25),
-                                child: Text(
-                                  data['name'] == ''
-                                      ? 'guest'.toUpperCase
-                                      : data['name'].toUpperCase(),
-                                  style: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w600),
+                                child: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 180),
+                                  child: Text(
+                                    data['name'] == ''
+                                        ? 'guest'.toUpperCase
+                                        : data['name'].toUpperCase(),
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w600),
+                                  ),
                                 ),
                               ),
                             ],
