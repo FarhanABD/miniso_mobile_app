@@ -105,8 +105,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   }
   //========== ENDS OF VOID DROPDOWN SELECTED MAIN CATEGORY ==================//
 
-  //------------------------- VOID FUNGSI UPLOAD PRODUCT ---------------------//
-  void uploadProduct() async {
+  Future<void> uploadImages() async {
     if (mainCategValue != 'select category' && subCategValue != 'subcategory') {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
@@ -120,41 +119,12 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
               await ref.putFile(File(image.path)).whenComplete(() async {
                 await ref.getDownloadURL().then((value) {
                   imagesUrlList.add(value);
-                }).whenComplete(() async {
-                  CollectionReference productRef =
-                      FirebaseFirestore.instance.collection('products');
-
-                  await productRef.doc().set({
-                    'maincateg': mainCategValue,
-                    'subcateg': subCategValue,
-                    'price': price,
-                    'instock': quantity,
-                    'productname': prodName,
-                    'prodesc': prodDesc,
-                    'sid': FirebaseAuth.instance.currentUser!.uid,
-                    'proimages': imagesUrlList,
-                    'discount': 0,
-                  });
                 });
               });
             }
           } catch (e) {
             print(e);
           }
-
-          print('images picked');
-          print('Valid');
-          print(price);
-          print(quantity);
-          print(prodName);
-          print(prodDesc);
-          setState(() {
-            imagesFileList = [];
-            mainCategValue = 'select category';
-            // subCategValue = 'subcategory';
-            subCategList = [];
-          });
-          _formKey.currentState!.reset();
         } else {
           MyMessageHandler.showSnackbar(
               _scaffoldKey, 'Please pick images first');
@@ -165,6 +135,40 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     } else {
       MyMessageHandler.showSnackbar(_scaffoldKey, 'Please select category');
     }
+  }
+
+  void uploadData() async {
+    if (imagesUrlList.isNotEmpty) {
+      CollectionReference productRef =
+          FirebaseFirestore.instance.collection('products');
+
+      await productRef.doc().set({
+        'maincateg': mainCategValue,
+        'subcateg': subCategValue,
+        'price': price,
+        'instock': quantity,
+        'productname': prodName,
+        'prodesc': prodDesc,
+        'sid': FirebaseAuth.instance.currentUser!.uid,
+        'proimages': imagesUrlList,
+        'discount': 0,
+      }).whenComplete(() {
+        setState(() {
+          imagesFileList = [];
+          mainCategValue = 'select category';
+          subCategList = [];
+          imagesUrlList = [];
+        });
+        _formKey.currentState!.reset();
+      });
+    } else {
+      print('no images uploaded');
+    }
+  }
+
+  //------------------------- VOID FUNGSI UPLOAD PRODUCT ---------------------//
+  void uploadProducts() async {
+    await uploadImages().whenComplete(() => uploadData());
   }
   //================== ENDS OF VOID FUNGSI UPLOAD PRODUCTS ===================//
 
@@ -417,7 +421,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
             ),
             FloatingActionButton(
               onPressed: () {
-                uploadProduct();
+                uploadProducts();
               },
               backgroundColor: Colors.pinkAccent,
               child: const Icon(Icons.upload, color: Colors.white),
