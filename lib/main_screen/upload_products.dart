@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, unused_local_variable
+// ignore_for_file: unused_import, unused_local_variable, depend_on_referenced_packages
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +8,7 @@ import 'package:miniso_store/utilities/categ_list.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({Key? key}) : super(key: key);
@@ -26,9 +27,11 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late int quantity;
   late String prodName;
   late String prodDesc;
+  late String prodId;
   String mainCategValue = 'select category';
   String subCategValue = 'subcategory';
   List<String> subCategList = [];
+  bool processing = false;
 
 //--------- FUNCTION IMAGE PICKER -------------------------------------------//
   final ImagePicker picker = ImagePicker();
@@ -105,11 +108,15 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   }
   //========== ENDS OF VOID DROPDOWN SELECTED MAIN CATEGORY ==================//
 
+  //------------- UPLOAD IMAGES FUNCTION -------------------------------------//
   Future<void> uploadImages() async {
     if (mainCategValue != 'select category' && subCategValue != 'subcategory') {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         if (imagesFileList!.isNotEmpty) {
+          setState(() {
+            processing = true;
+          });
           try {
             for (var image in imagesFileList!) {
               firebase_storage.Reference ref = firebase_storage
@@ -136,13 +143,17 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
       MyMessageHandler.showSnackbar(_scaffoldKey, 'Please select category');
     }
   }
+  //======================= ENDS OF UPLOAD IMAGES FUNCTION ===================//
 
   void uploadData() async {
     if (imagesUrlList.isNotEmpty) {
       CollectionReference productRef =
           FirebaseFirestore.instance.collection('products');
 
-      await productRef.doc().set({
+      prodId = const Uuid().v4();
+
+      await productRef.doc(prodId).set({
+        'prodid': prodId,
         'maincateg': mainCategValue,
         'subcateg': subCategValue,
         'price': price,
@@ -154,6 +165,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         'discount': 0,
       }).whenComplete(() {
         setState(() {
+          processing = false;
           imagesFileList = [];
           mainCategValue = 'select category';
           subCategList = [];
@@ -420,11 +432,17 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
               ),
             ),
             FloatingActionButton(
-              onPressed: () {
-                uploadProducts();
-              },
+              onPressed: processing == true
+                  ? null
+                  : () {
+                      uploadProducts();
+                    },
               backgroundColor: Colors.pinkAccent,
-              child: const Icon(Icons.upload, color: Colors.white),
+              child: processing == true
+                  ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                  : const Icon(Icons.upload, color: Colors.white),
             ),
           ],
         ),
