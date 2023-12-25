@@ -202,7 +202,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                   Row(
                     children: [
                       Container(
-                        color: Color.fromARGB(255, 250, 165, 193),
+                        color: const Color.fromARGB(255, 250, 165, 193),
                         height: size.width * 0.5,
                         width: size.width * 0.5,
                         child: imagesFileList != null
@@ -242,8 +242,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                       .map<DropdownMenuItem<String>>((value) {
                                     return DropdownMenuItem(
                                         child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 20),
+                                          padding: EdgeInsets.only(left: 20),
                                           child: Text(value),
                                         ),
                                         value: value);
