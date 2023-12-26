@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
+import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
+
+import '../models/product_card_model.dart';
 
 class MenGalleryScreen extends StatefulWidget {
   const MenGalleryScreen({Key? key}) : super(key: key);
@@ -9,8 +13,11 @@ class MenGalleryScreen extends StatefulWidget {
 }
 
 class _MenGalleryScreenState extends State<MenGalleryScreen> {
-  final Stream<QuerySnapshot> productStream =
-      FirebaseFirestore.instance.collection('products').snapshots();
+  //---- QUERRY UNTUK MEMANGGIL CATEGORY MEN PRODUCT DARI FIREBASE -----------//
+  final Stream<QuerySnapshot> productStream = FirebaseFirestore.instance
+      .collection('products')
+      .where('maincateg', isEqualTo: 'men')
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +29,36 @@ class _MenGalleryScreenState extends State<MenGalleryScreen> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading");
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
-        return ListView(
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data =
-                document.data()! as Map<String, dynamic>;
-            return ListTile(
-              leading: Image(
-                image: NetworkImage(data['proimages'][0]),
-              ),
-              title: Text(data['productname']),
-              subtitle: Text(data['price'].toString()),
-              trailing: Text(data['subcateg']),
-              titleTextStyle: const TextStyle(color: Colors.redAccent),
-            );
-          }).toList(),
+        //------- KONDISI JIKA ITEMS PADA CATEGORY TIDAK DITEMUKAN ----------//
+        if (snapshot.data!.docs.isEmpty) {
+          return const Center(
+            child: Text(
+              'There is no Items of \n\n Men',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.red, fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          );
+        }
+
+        //--------- START OF SCROLLVIEW WIDGET PRODUCTS ----------------------//
+        return SingleChildScrollView(
+          child: StaggeredGridView.countBuilder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: snapshot.data!.docs.length,
+              crossAxisCount: 2,
+              itemBuilder: (context, index) {
+                return ProductcardModel(
+                  products: snapshot.data!.docs[index],
+                );
+              },
+              staggeredTileBuilder: (context) => const StaggeredTile.fit(1)),
         );
       },
     );
