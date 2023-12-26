@@ -1,6 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:miniso_store/galleries/accesories_gallery.dart';
+import 'package:miniso_store/galleries/bags_gallery.dart';
+import 'package:miniso_store/galleries/beauty_gallery.dart';
+import 'package:miniso_store/galleries/electronics_gallery.dart';
+import 'package:miniso_store/galleries/homegarden_gallery.dart';
+import 'package:miniso_store/galleries/kids_gallery.dart';
 import 'package:miniso_store/galleries/men_gallery.dart';
+import 'package:miniso_store/galleries/shoes_gallery.dart';
+import 'package:miniso_store/galleries/women_gallery.dart';
 
 import 'package:miniso_store/widgets/fake_search.dart';
 
@@ -22,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.white,
 
           //------------ CONTAINER SEARCH BAR DI HOME SCREEN -----------------//
-          title: FakeSearch(),
+          title: const FakeSearch(),
           bottom: const TabBar(
             isScrollable: true,
             indicatorColor: Colors.redAccent,
@@ -43,14 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
         body: const TabBarView(
           children: [
             MenGalleryScreen(),
-            Center(child: Text('Women Screen')),
-            Center(child: Text('Shoes Screen')),
-            Center(child: Text('Bags Screen')),
-            Center(child: Text('Electronics Screen')),
-            Center(child: Text('Accesories Screen')),
-            Center(child: Text('Home & Garden Screen')),
-            Center(child: Text('Kids Screen')),
-            Center(child: Text('Beauty Screen')),
+            WomenGalleryScreen(),
+            ShoesGalleryScreen(),
+            BagsGalleryScreen(),
+            ElectronicsGalleryScreen(),
+            AccesoriesGalleryScreen(),
+            HomeGardenGalleryScreen(),
+            KidsGalleryScreen(),
+            BeautyGalleryScreen(),
           ],
         ),
       ),
