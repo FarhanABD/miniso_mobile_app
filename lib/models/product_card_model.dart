@@ -12,7 +12,9 @@ class ProductcardModel extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const ProductDetailScreen()));
+                builder: (context) => ProductDetailScreen(
+                      proList: products,
+                    )));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),

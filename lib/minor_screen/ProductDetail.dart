@@ -8,56 +8,106 @@ import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({Key? key}) : super(key: key);
+  final dynamic proList;
+  const ProductDetailScreen({Key? key, required this.proList})
+      : super(key: key);
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  final Stream<QuerySnapshot> productStream =
-      FirebaseFirestore.instance.collection('products').snapshots();
+  late List<dynamic> imagesList = widget.proList['proimages'];
 
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> productStream = FirebaseFirestore.instance
+        .collection('products')
+        .where('maincateg', isEqualTo: widget.proList['maincateg'])
+        .where('subcateg', isEqualTo: widget.proList['subcateg'])
+        .snapshots();
+
     return Material(
       child: SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.45,
-                  child: Swiper(
-                      pagination: const SwiperPagination(
-                          builder: SwiperPagination.fraction),
-                      itemBuilder: (context, index) {
-                        return const Image(image: NetworkImage(''));
-                      },
-                      itemCount: 1),
-                ),
-                const Text(
-                  'Product Name',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
+                Stack(children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.45,
+                    child: Swiper(
+                        pagination: const SwiperPagination(
+                            builder: SwiperPagination.fraction),
+                        itemBuilder: (context, index) {
+                          //------ MEMANGGIL GAMBAR PRODUK DARI FIREBASE -------//
+                          return Image(image: NetworkImage(imagesList[index]));
+                        },
+                        itemCount: imagesList.length),
+                  ),
+                  Positioned(
+                      left: 15,
+                      top: 20,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.pinkAccent,
+                        child:
+                            //--------------- ICON BUTTON BACK ------------------//
+                            IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )),
+                  Positioned(
+                      right: 15,
+                      top: 20,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.pinkAccent,
+                        child:
+                            //---- ICON BUTTON SHARE -----------------------------//
+                            IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.share,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ))
+                ]),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 50),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.proList['productname'],
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Row(
+                    Row(
                       children: [
-                        Text(
-                          'USD',
+                        const Text(
+                          '   USD ',
                           style: TextStyle(
                               color: Colors.red,
                               fontSize: 20,
                               fontWeight: FontWeight.w600),
                         ),
                         Text(
-                          '99.99',
-                          style: TextStyle(
+                          widget.proList['price'].toStringAsFixed(2),
+                          style: const TextStyle(
                               color: Colors.red,
                               fontSize: 20,
                               fontWeight: FontWeight.w600),
@@ -73,15 +123,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         )),
                   ],
                 ),
-                const Text(
-                  '99 pieces available in stock',
-                  style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                Text(
+                  (widget.proList['instock'].toString()) +
+                      (' pieces available in stock'),
+                  style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
                 ),
                 const ProductDetailHeader(
                   label: "   Item Description   ",
                 ),
                 Text(
-                  'prodescription',
+                  widget.proList['prodesc'],
                   textScaleFactor: 1.1,
                   style: TextStyle(
                       fontSize: 20,
@@ -144,17 +195,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           bottomSheet: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.store)),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Row(
+                  children: [
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.store)),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.shopping_cart)),
+                  ],
+                ),
               ),
-              YellowButton(label: 'ADD TO CART', onPressed: () {}, width: 0.55),
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: YellowButton(
+                    label: 'ADD TO CART', onPressed: () {}, width: 0.40),
+              ),
             ],
           ),
         ),
