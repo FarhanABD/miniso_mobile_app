@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:miniso_store/minor_screen/FullScreenView.dart';
 import 'package:miniso_store/models/product_card_model.dart';
 import 'package:miniso_store/widgets/yellow_button.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
@@ -33,51 +34,62 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                Stack(children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.45,
-                    child: Swiper(
-                        pagination: const SwiperPagination(
-                            builder: SwiperPagination.fraction),
-                        itemBuilder: (context, index) {
-                          //------ MEMANGGIL GAMBAR PRODUK DARI FIREBASE -------//
-                          return Image(image: NetworkImage(imagesList[index]));
-                        },
-                        itemCount: imagesList.length),
-                  ),
-                  Positioned(
-                      left: 15,
-                      top: 20,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.pinkAccent,
-                        child:
-                            //--------------- ICON BUTTON BACK ------------------//
-                            IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FullScreenView(
+                                  imageList: imagesList,
+                                )));
+                  },
+                  child: Stack(children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.45,
+                      child: Swiper(
+                          pagination: const SwiperPagination(
+                              builder: SwiperPagination.fraction),
+                          itemBuilder: (context, index) {
+                            //------ MEMANGGIL GAMBAR PRODUK DARI FIREBASE -------//
+                            return Image(
+                                image: NetworkImage(imagesList[index]));
                           },
-                          icon: const Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Colors.white,
+                          itemCount: imagesList.length),
+                    ),
+                    Positioned(
+                        left: 15,
+                        top: 20,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.pinkAccent,
+                          child:
+                              //--------------- ICON BUTTON BACK ------------------//
+                              IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back_ios_new,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      )),
-                  Positioned(
-                      right: 15,
-                      top: 20,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.pinkAccent,
-                        child:
-                            //---- ICON BUTTON SHARE -----------------------------//
-                            IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.share,
-                            color: Colors.white,
+                        )),
+                    Positioned(
+                        right: 15,
+                        top: 20,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.pinkAccent,
+                          child:
+                              //---- ICON BUTTON SHARE -----------------------------//
+                              IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.share,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      ))
-                ]),
+                        ))
+                  ]),
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 50),
                   child: Column(
