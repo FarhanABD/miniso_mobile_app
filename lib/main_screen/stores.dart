@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
 
@@ -11,6 +12,60 @@ class StoreScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         title: const AppBarTitle(title: 'Stores'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: StreamBuilder<QuerySnapshot>(
+          stream:
+              FirebaseFirestore.instance.collection('suppliers').snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasData) {
+              return GridView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 25,
+                      crossAxisSpacing: 25,
+                      crossAxisCount: 2),
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Stack(
+                          children: [
+                            //---------- WIDGET UNTUK MENAMPILKAN FOTO PROFILE TOKO -----//
+                            SizedBox(
+                              height: 120,
+                              width: 120,
+                              child: Image.asset('images/inapp/store.jpg'),
+                            ),
+                            Positioned(
+                                bottom: 28,
+                                left: 10,
+                                child: SizedBox(
+                                  height: 48,
+                                  width: 100,
+                                  child: Image.network(
+                                    snapshot.data!.docs[index]['storelogo'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ))
+                          ],
+                        ),
+                        Text(
+                          //---- WIDGET UNTUK MENAMPILKAN NAMA TOKO ----------//
+                          snapshot.data!.docs[index]['storename'].toLowercase(),
+                          style:
+                              const TextStyle(fontSize: 26, fontFamily: 'Acme'),
+                        )
+                      ],
+                    );
+                  });
+            }
+            return const Center(
+              child: Text('No Store wowkkwkwk'),
+            );
+          },
+        ),
       ),
     );
   }

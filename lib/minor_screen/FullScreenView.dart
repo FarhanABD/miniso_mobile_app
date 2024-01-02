@@ -10,8 +10,11 @@ class FullScreenView extends StatefulWidget {
 }
 
 class _FullScreenViewState extends State<FullScreenView> {
+  final PageController _controller = PageController();
+  int index = 0;
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -19,47 +22,65 @@ class _FullScreenViewState extends State<FullScreenView> {
         backgroundColor: Colors.white,
         leading: const AppBarBackButton(),
       ),
-      body: Column(
-        children: [
-          const Center(
-              child: Text(
-            '1/5',
-            style: TextStyle(fontSize: 24, letterSpacing: 8),
-          )),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.5,
-            child: PageView(
-              children: List.generate(widget.imageList.length, (index) {
-                return InteractiveViewer(
-                    transformationController: TransformationController(),
-                    child: Image.network(widget.imageList[index].toString()));
-              }),
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Center(
+                child: Text(
+              ('${index + 1}') + ('/') + (widget.imageList.length.toString()),
+              style: const TextStyle(fontSize: 24, letterSpacing: 8),
+            )),
+            SizedBox(
+              height: size.height * 0.5,
+              child: PageView(
+                controller: _controller,
+                children: images(),
+                onPageChanged: (value) {
+                  setState(() {
+                    index = value;
+                  });
+                },
+              ),
             ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.imageList.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                      margin: const EdgeInsets.all(8),
-                      width: 120,
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 4, color: Colors.pinkAccent),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          widget.imageList[index],
-                          fit: BoxFit.cover,
-                        ),
-                      ));
-                }),
-          )
-        ],
+            SizedBox(height: size.height * 0.2, child: imageView()),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget imageView() {
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.imageList.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              _controller.jumpToPage(index);
+            },
+            child: Container(
+                margin: const EdgeInsets.all(8),
+                width: 120,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 4, color: Colors.pinkAccent),
+                    borderRadius: BorderRadius.circular(15)),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    widget.imageList[index],
+                    fit: BoxFit.cover,
+                  ),
+                )),
+          );
+        });
+  }
+
+  List<Widget> images() {
+    return List.generate(widget.imageList.length, (index) {
+      return InteractiveViewer(
+          transformationController: TransformationController(),
+          child: Image.network(widget.imageList[index].toString()));
+    });
   }
 }
