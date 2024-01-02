@@ -13,6 +13,7 @@ class VisitStore extends StatefulWidget {
 }
 
 class _VisitStoreState extends State<VisitStore> {
+  bool following = false;
   @override
   Widget build(BuildContext context) {
     CollectionReference suppliers =
@@ -91,21 +92,23 @@ class _VisitStoreState extends State<VisitStore> {
                           ],
                         ),
                         Container(
-                          height: 35,
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          decoration: BoxDecoration(
-                            color: Colors.pinkAccent,
-                            border: Border.all(width: 3, color: Colors.white),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'FOLLOW',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
+                            height: 35,
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            decoration: BoxDecoration(
+                              color: Colors.pinkAccent,
+                              border: Border.all(width: 3, color: Colors.white),
+                              borderRadius: BorderRadius.circular(25),
                             ),
-                          ),
-                        )
+                            child: MaterialButton(
+                              onPressed: () {
+                                setState(() {
+                                  following = !following;
+                                });
+                              },
+                              child: following == true
+                                  ? const Text('Following')
+                                  : const Text('FOLLOW'),
+                            ))
                       ],
                     ),
                   )
