@@ -63,8 +63,7 @@ class StoreScreen extends StatelessWidget {
                           ),
                           Text(
                             //---- WIDGET UNTUK MENAMPILKAN NAMA TOKO ----------//
-                            snapshot.data!.docs[index]['storename']
-                                .toLowercase(),
+                            snapshot.data!.docs[index]['storename'],
                             style: const TextStyle(
                                 fontSize: 26, fontFamily: 'Acme'),
                           )
