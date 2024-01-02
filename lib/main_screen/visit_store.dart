@@ -134,7 +134,7 @@ class _VisitStoreState extends State<VisitStore> {
                   if (snapshot.data!.docs.isEmpty) {
                     return const Center(
                       child: Text(
-                        'This store has no items',
+                        'This store has no items wowkkww',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.red,
