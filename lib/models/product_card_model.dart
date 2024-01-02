@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/minor_screen/ProductDetail.dart';
 
@@ -64,12 +65,20 @@ class ProductcardModel extends StatelessWidget {
                               fontSize: 16,
                               fontWeight: FontWeight.w600),
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.favorite_border_outlined,
-                              color: Colors.red,
-                            )),
+                        products['sid'] ==
+                                FirebaseAuth.instance.currentUser!.uid
+                            ? IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.red,
+                                ))
+                            : IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.favorite_border_outlined,
+                                  color: Colors.red,
+                                )),
                       ],
                     )
                   ],
