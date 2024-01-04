@@ -6,10 +6,12 @@ import 'package:miniso_store/main_screen/cart.dart';
 import 'package:miniso_store/main_screen/visit_store.dart';
 import 'package:miniso_store/minor_screen/FullScreenView.dart';
 import 'package:miniso_store/models/product_card_model.dart';
+import 'package:miniso_store/providers/cart_provider.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
 import 'package:miniso_store/widgets/yellow_button.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final dynamic proList;
@@ -242,7 +244,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: YellowButton(
-                    label: 'ADD TO CART', onPressed: () {}, width: 0.40),
+                    label: 'ADD TO CART',
+                    onPressed: () {
+                      context.read<Cart>().addItem(
+                            widget.proList['productname'],
+                            widget.proList['price'],
+                            1,
+                            widget.proList['instock'],
+                            widget.proList['proimages'],
+                            widget.proList['prodid'],
+                            widget.proList['sid'],
+                          );
+                    },
+                    width: 0.40),
               ),
             ],
           ),
