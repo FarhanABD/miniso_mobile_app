@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/main_screen/visit_store.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({Key? key}) : super(key: key);
@@ -76,6 +77,15 @@ class StoreScreen extends StatelessWidget {
               child: Text('No Store wowkkwkwk'),
             );
           },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.green,
+        child: const Icon(
+          FontAwesomeIcons.whatsapp,
+          color: Colors.white,
+          size: 40,
         ),
       ),
     );
