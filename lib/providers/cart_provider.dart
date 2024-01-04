@@ -1,6 +1,7 @@
 //------ CLASS PRODUCT UNTUK MENYIMPAN VALUE DARI SETIAP ----//
 //---- PRODUK UNTUK DIMUNCULKAN DI CART SCREEN ---//
-import 'package:flutter/cupertino.dart';
+
+import 'package:flutter/foundation.dart';
 
 class Product {
   String name;
@@ -28,9 +29,8 @@ class Cart extends ChangeNotifier {
     return _list;
   }
 
-  // ignore: body_might_complete_normally_nullable
   int? get count {
-    _list.length;
+    return _list.length;
   }
 
   void addItem(
