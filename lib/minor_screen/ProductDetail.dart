@@ -2,9 +2,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:miniso_store/main_screen/cart.dart';
 import 'package:miniso_store/main_screen/visit_store.dart';
 import 'package:miniso_store/minor_screen/FullScreenView.dart';
 import 'package:miniso_store/models/product_card_model.dart';
+import 'package:miniso_store/widgets/appbar_widget.dart';
 import 'package:miniso_store/widgets/yellow_button.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -225,7 +227,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       width: 20,
                     ),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CartScreen(
+                                        back: AppBarBackButton(),
+                                      )));
+                        },
                         icon: const Icon(Icons.shopping_cart)),
                   ],
                 ),
