@@ -27,7 +27,7 @@ class _CartScreenState extends State<CartScreen> {
           appBar: AppBar(
             leading: widget.back,
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.pinkAccent.shade100,
             title: const AppBarTitle(title: 'Cart'),
             actions: [
               IconButton(
@@ -44,6 +44,7 @@ class _CartScreenState extends State<CartScreen> {
               return ListView.builder(
                 itemCount: cart.count,
                 itemBuilder: (context, index) {
+                  //--- FINAL VARIABLE DARI product -------//
                   final product = cart.getItems[index];
                   return Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -92,29 +93,47 @@ class _CartScreenState extends State<CartScreen> {
                                                 BorderRadius.circular(15)),
                                         child: Row(
                                           children: [
-                                            //------ ICON (-) & (+) --------------//
-                                            IconButton(
-                                                onPressed: () {
-                                                  cart.reduceByOne(product);
-                                                },
-                                                icon: const Icon(
-                                                  FontAwesomeIcons.minus,
-                                                  size: 18,
-                                                )),
+                                            //------ ICON (-) & (+) ----------//
+                                            product.qty == 1
+                                                ? IconButton(
+                                                    onPressed: () {},
+                                                    icon: const Icon(
+                                                      Icons.delete_forever,
+                                                      size: 18,
+                                                    ))
+                                                : IconButton(
+                                                    onPressed: () {
+                                                      cart.reduceByOne(product);
+                                                    },
+                                                    icon: const Icon(
+                                                      FontAwesomeIcons.minus,
+                                                      size: 18,
+                                                    )),
+                                            //--- ICON TEXT QUANTITY -----//
                                             Text(
                                               product.qty.toString(),
-                                              style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontFamily: 'Acme'),
+                                              style:
+                                                  product.qty == product.stock
+                                                      ? const TextStyle(
+                                                          fontSize: 20,
+                                                          fontFamily: 'Acme',
+                                                          color: Colors.red)
+                                                      : const TextStyle(
+                                                          fontSize: 20,
+                                                          fontFamily: 'Acme'),
                                             ),
                                             IconButton(
-                                                onPressed: () {
-                                                  cart.increment(product);
-                                                },
+                                                onPressed: product.qty ==
+                                                        product.stock
+                                                    ? null
+                                                    : () {
+                                                        cart.increment(product);
+                                                      },
                                                 icon: const Icon(
                                                   FontAwesomeIcons.plus,
                                                   size: 18,
                                                 ))
+                                            //====== ENDS OF ICON (-) & (+) ====//
                                           ],
                                         ),
                                       )

@@ -7,7 +7,7 @@ class Product {
   String name;
   double price;
   int qty = 1;
-  int qntty;
+  int stock;
   List imagesUrl;
   String documentId;
   String suppId;
@@ -16,7 +16,7 @@ class Product {
     required this.name,
     required this.price,
     required this.qty,
-    required this.qntty,
+    required this.stock,
     required this.imagesUrl,
     required this.documentId,
     required this.suppId,
@@ -44,7 +44,7 @@ class Cart extends ChangeNotifier {
     String name,
     double price,
     int qty,
-    int qntty,
+    int stock,
     List imagesUrl,
     String documentId,
     String suppId,
@@ -53,7 +53,7 @@ class Cart extends ChangeNotifier {
         name: name,
         price: price,
         qty: qty,
-        qntty: qntty,
+        stock: stock,
         imagesUrl: imagesUrl,
         documentId: documentId,
         suppId: suppId);
