@@ -7,6 +7,7 @@ import 'package:miniso_store/main_screen/visit_store.dart';
 import 'package:miniso_store/minor_screen/FullScreenView.dart';
 import 'package:miniso_store/models/product_card_model.dart';
 import 'package:miniso_store/providers/cart_provider.dart';
+import 'package:miniso_store/providers/wishlist_provider.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 import 'package:miniso_store/widgets/yellow_button.dart';
@@ -138,12 +139,45 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ],
                       ),
                       IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.favorite_border_outlined,
-                            color: Colors.red,
-                            size: 30,
-                          )),
+                        onPressed: () {
+                          context
+                                      .watch<Wishlist>()
+                                      .getWishItems
+                                      .firstWhereOrNull((product) =>
+                                          product.documentId ==
+                                          widget.proList['prodid']) !=
+                                  null
+                              ? context
+                                  .read<Wishlist>()
+                                  .removeWishlist(widget.proList['prodid'])
+                              : context.read<Wishlist>().addWishItem(
+                                    widget.proList['productname'],
+                                    widget.proList['price'],
+                                    1,
+                                    widget.proList['instock'],
+                                    widget.proList['proimages'],
+                                    widget.proList['prodid'],
+                                    widget.proList['sid'],
+                                  );
+                        },
+                        icon: context
+                                    .watch<Wishlist>()
+                                    .getWishItems
+                                    .firstWhereOrNull((product) =>
+                                        product.documentId ==
+                                        widget.proList['prodid']) !=
+                                null
+                            ? const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 30,
+                              )
+                            : const Icon(
+                                Icons.favorite_outline,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                      ),
                     ],
                   ),
                   Text(

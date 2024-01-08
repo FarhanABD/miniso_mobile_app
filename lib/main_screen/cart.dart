@@ -1,14 +1,17 @@
 // ignore_for_file: unused_import
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miniso_store/main_screen/category.dart';
 import 'package:miniso_store/main_screen/customer_home.dart';
 import 'package:miniso_store/providers/cart_provider.dart';
+import 'package:miniso_store/providers/wishlist_provider.dart';
 import 'package:miniso_store/widgets/alert_dialog.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
 import 'package:miniso_store/widgets/yellow_button.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 class CartScreen extends StatefulWidget {
   final Widget? back;
@@ -63,15 +66,15 @@ class _CartScreenState extends State<CartScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Text(
+                    const Text(
                       'Total: \$ ',
                       style: TextStyle(fontSize: 18),
                     ),
                     Text(
-                      '00.00',
-                      style: TextStyle(
+                      context.watch<Cart>().totalPrice.toStringAsFixed(2),
+                      style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
@@ -199,7 +202,88 @@ class CartItems extends StatelessWidget {
                                       product.qty == 1
                                           ? IconButton(
                                               onPressed: () {
-                                                cart.removeItem(product);
+                                                //----- CUPERTINO POP UP WIDGET --------//
+                                                showCupertinoModalPopup<void>(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          CupertinoActionSheet(
+                                                    title: const Text(
+                                                        'Remove Item'),
+                                                    message: const Text(
+                                                        'Are u sure to remove this item ?'),
+                                                    actions: <CupertinoActionSheetAction>[
+                                                      CupertinoActionSheetAction(
+                                                        isDefaultAction: true,
+                                                        onPressed: () async {
+                                                          context
+                                                                      .read<
+                                                                          Wishlist>()
+                                                                      .getWishItems
+                                                                      .firstWhereOrNull((element) =>
+                                                                          element
+                                                                              .documentId ==
+                                                                          product
+                                                                              .documentId) !=
+                                                                  null
+                                                              ? context
+                                                                  .read<Cart>()
+                                                                  .removeItem(
+                                                                      product)
+                                                              : await context
+                                                                  .read<
+                                                                      Wishlist>()
+                                                                  .addWishItem(
+                                                                      product
+                                                                          .name,
+                                                                      product
+                                                                          .price,
+                                                                      1,
+                                                                      product
+                                                                          .stock,
+                                                                      product
+                                                                          .imagesUrl,
+                                                                      product
+                                                                          .documentId,
+                                                                      product
+                                                                          .suppId);
+                                                          context
+                                                              .read<Cart>()
+                                                              .removeItem(
+                                                                  product);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const Text(
+                                                            'Move To Wishlist'),
+                                                      ),
+                                                      CupertinoActionSheetAction(
+                                                        onPressed: () {
+                                                          context
+                                                              .read<Cart>()
+                                                              .removeItem(
+                                                                  product);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const Text(
+                                                            'Delete Item'),
+                                                      ),
+                                                    ],
+                                                    cancelButton: TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const Text(
+                                                          'cancel',
+                                                          style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontSize: 20),
+                                                        )),
+                                                  ),
+                                                );
+                                                //======== ENDS OF CUPERTINO POP UP WIDGET =======//
                                               },
                                               icon: const Icon(
                                                 Icons.delete_forever,

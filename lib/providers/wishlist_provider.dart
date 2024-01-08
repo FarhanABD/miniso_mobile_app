@@ -4,26 +4,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:miniso_store/providers/product_class.dart';
 
-class Cart extends ChangeNotifier {
+class Wishlist extends ChangeNotifier {
   final List<Product> _list = [];
-  List<Product> get getItems {
+  List<Product> get getWishItems {
     return _list;
-  }
-
-  double get totalPrice {
-    var total = 0.0;
-
-    for (var item in _list) {
-      total += item.price * item.qty;
-    }
-    return total;
   }
 
   int? get count {
     return _list.length;
   }
 
-  void addItem(
+  Future<void> addWishItem(
     String name,
     double price,
     int qty,
@@ -31,7 +22,7 @@ class Cart extends ChangeNotifier {
     List imagesUrl,
     String documentId,
     String suppId,
-  ) {
+  ) async {
     final product = Product(
         name: name,
         price: price,
@@ -44,25 +35,18 @@ class Cart extends ChangeNotifier {
     notifyListeners();
   }
 
-  //----- FUNCTION TAMBAH PRODUK ---------//
-  void increment(Product product) {
-    product.increase();
-    notifyListeners();
-  }
-
-  //--------- FUNCTION KURANGI PRODUK DI DALAM CART --------//
-  void reduceByOne(Product product) {
-    product.decrease();
-    notifyListeners();
-  }
-
   void removeItem(Product product) {
     _list.remove(product);
     notifyListeners();
   }
 
-  void clearCart() {
+  void clearWishlist() {
     _list.clear();
+    notifyListeners();
+  }
+
+  void removeWishlist(String id) {
+    _list.removeWhere((element) => element.documentId == id);
     notifyListeners();
   }
 }
