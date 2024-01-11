@@ -26,18 +26,28 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  //--- MEMUNCULKAN DATA DARI FIREBASE BERDASARKAN CATEGORY & SUB CATEGORY ----//
+  late final Stream<QuerySnapshot> productStream = FirebaseFirestore.instance
+      .collection('products')
+      .where('maincateg', isEqualTo: widget.proList['maincateg'])
+      .where('subcateg', isEqualTo: widget.proList['subcateg'])
+      .snapshots();
+
+  late var existingItemWishlist = context
+      .read<Wishlist>()
+      .getWishItems
+      .firstWhereOrNull(
+          (product) => product.documentId == widget.proList['prodid']);
+
+  late var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull(
+      (product) => product.documentId == widget.proList['prodid']);
+
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
   late List<dynamic> imagesList = widget.proList['proimages'];
 
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> productStream = FirebaseFirestore.instance
-        .collection('products')
-        .where('maincateg', isEqualTo: widget.proList['maincateg'])
-        .where('subcateg', isEqualTo: widget.proList['subcateg'])
-        .snapshots();
-
     return Material(
       child: SafeArea(
         child: ScaffoldMessenger(
@@ -140,13 +150,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       IconButton(
                         onPressed: () {
-                          context
-                                      .watch<Wishlist>()
-                                      .getWishItems
-                                      .firstWhereOrNull((product) =>
-                                          product.documentId ==
-                                          widget.proList['prodid']) !=
-                                  null
+                          existingItemWishlist != null
                               ? context
                                   .read<Wishlist>()
                                   .removeWishlist(widget.proList['prodid'])
@@ -289,11 +293,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       label: 'ADD TO CART',
                       onPressed: () {
                         //--- CHECK APAKAH PRODUK SUDAH TERDAPAT DIDALAM CART --//
-                        context.read<Cart>().getItems.firstWhereOrNull(
-                                    (product) =>
-                                        product.documentId ==
-                                        widget.proList['prodid']) !=
-                                null
+                        existingItemCart != null
                             ? MyMessageHandler.showSnackbar(
                                 _scaffoldKey, 'Your item already in cart')
                             : context.read<Cart>().addItem(
