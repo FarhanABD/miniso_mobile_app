@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/models/product_card_model.dart';
+import 'package:miniso_store/widgets/appbar_widget.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
@@ -13,6 +15,7 @@ class VisitStore extends StatefulWidget {
 }
 
 class _VisitStoreState extends State<VisitStore> {
+  bool following = false;
   @override
   Widget build(BuildContext context) {
     CollectionReference suppliers =
@@ -53,6 +56,7 @@ class _VisitStoreState extends State<VisitStore> {
                 'images/inapp/coverimage.jpg',
                 fit: BoxFit.cover,
               ),
+              leading: const YellowBackButton(),
               title: Row(
                 children: [
                   Container(
@@ -83,29 +87,59 @@ class _VisitStoreState extends State<VisitStore> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                data['storename'].toUppercase(),
+                                data['storename'].toString().toUpperCase(),
                                 style: const TextStyle(
                                     fontSize: 20, color: Colors.yellow),
                               ),
                             ),
                           ],
                         ),
-                        Container(
-                          height: 35,
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          decoration: BoxDecoration(
-                            color: Colors.pinkAccent,
-                            border: Border.all(width: 3, color: Colors.white),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'FOLLOW',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
-                            ),
-                          ),
-                        )
+                        //---------- CONTAINER HEADER STORE PROFILE ----------//
+                        data['sid'] == FirebaseAuth.instance.currentUser!.uid
+                            ? Container(
+                                height: 35,
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                decoration: BoxDecoration(
+                                  color: Colors.pinkAccent,
+                                  border:
+                                      Border.all(width: 3, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                //---- JIKA SUPPLIER MEMBUKA TOKO SENDIRI MUNCUL BUTTON EDIT DAN BACK --//
+                                child: MaterialButton(
+                                    onPressed: () {},
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text('Edit'),
+                                        Icon(
+                                          Icons.edit,
+                                          color: Colors.black,
+                                        )
+                                      ],
+                                    )))
+                            :
+                            //---- JIKA SUPPLIER BUKA TOKO LAIN MAKA MUNCUL BUTTON FOLLOW --------//
+                            Container(
+                                height: 35,
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                decoration: BoxDecoration(
+                                  color: Colors.pinkAccent,
+                                  border:
+                                      Border.all(width: 3, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      following = !following;
+                                    });
+                                  },
+                                  child: following == true
+                                      ? const Text('Following')
+                                      : const Text('FOLLOW'),
+                                ))
                       ],
                     ),
                   )

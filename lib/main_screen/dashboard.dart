@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/dashboard_components/edit_store.dart';
 import 'package:miniso_store/dashboard_components/manage_product.dart';
-import 'package:miniso_store/dashboard_components/my_store.dart';
 import 'package:miniso_store/dashboard_components/suppliers_balance.dart';
 import 'package:miniso_store/dashboard_components/suppliers_order.dart';
 import 'package:miniso_store/dashboard_components/suppliers_statics.dart';
+import 'package:miniso_store/main_screen/visit_store.dart';
 import 'package:miniso_store/widgets/alert_dialog.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
 
@@ -30,13 +30,15 @@ List<IconData> icons = [
 ];
 
 //------ LIST WIDGET UNTUK MEMANGGIL HALAMAN - HALAMAN LAIN PADA DASHBOARD ---//
-List<Widget> pages = const [
-  MyStore(),
-  SupplierOrder(),
-  EditStore(),
-  ManageProduct(),
-  BalanceScreen(),
-  StaticsScreen(),
+List<Widget> pages = [
+  VisitStore(
+    suppId: FirebaseAuth.instance.currentUser!.uid,
+  ),
+  const SupplierOrder(),
+  const EditStore(),
+  const ManageProduct(),
+  const BalanceScreen(),
+  const StaticsScreen(),
 ];
 
 class DashboardScreen extends StatelessWidget {
