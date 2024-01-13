@@ -5,6 +5,9 @@ import 'package:miniso_store/main_screen/category.dart';
 import 'package:miniso_store/main_screen/home.dart';
 import 'package:miniso_store/main_screen/profile.dart';
 import 'package:miniso_store/main_screen/stores.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:miniso_store/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({Key? key}) : super(key: key);
@@ -32,24 +35,33 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
         unselectedItemColor: Colors.black,
         elevation: 0,
         currentIndex: _selectedIndex,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Category',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.shop),
             label: 'Stores',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: badges.Badge(
+                showBadge: context.read<Cart>().getItems.isEmpty ? false : true,
+                badgeStyle:
+                    const badges.BadgeStyle(badgeColor: Colors.redAccent),
+                badgeContent: Text(
+                  context.watch<Cart>().getItems.length.toString(),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                child: const Icon(Icons.shopping_cart)),
             label: 'Cart',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
