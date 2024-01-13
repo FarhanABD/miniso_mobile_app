@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/main_screen/category.dart';
 import 'package:miniso_store/main_screen/customer_home.dart';
+import 'package:miniso_store/minor_screen/place_order.dart';
 import 'package:miniso_store/models/cart_model.dart';
 import 'package:miniso_store/providers/cart_provider.dart';
 import 'package:miniso_store/providers/product_class.dart';
@@ -25,6 +26,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
+    double total = context.watch<Cart>().totalPrice;
     return Material(
       child: SafeArea(
         child: Scaffold(
@@ -74,7 +76,7 @@ class _CartScreenState extends State<CartScreen> {
                       style: TextStyle(fontSize: 18),
                     ),
                     Text(
-                      context.watch<Cart>().totalPrice.toStringAsFixed(2),
+                      total.toStringAsFixed(2),
                       style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -82,11 +84,30 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ],
                 ),
-                YellowButton(
-                  width: 0.45,
-                  label: "CHECK OUT",
-                  onPressed: () {},
-                ),
+                Container(
+                  height: 35,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.pinkAccent,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: MaterialButton(
+                    onPressed: total == 0.0
+                        ? null
+                        : () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PlaceOrderScreen(),
+                                ));
+                          },
+                  ),
+                )
+                // YellowButton(
+                //   width: 0.45,
+                //   label: "CHECK OUT",
+                //   onPressed: total == 0.0 ? null : () {},
+                // ),
               ],
             ),
           ),
