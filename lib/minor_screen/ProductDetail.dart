@@ -15,6 +15,7 @@ import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ProductDetailScreen extends StatefulWidget {
   final dynamic proList;
@@ -33,21 +34,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       .where('subcateg', isEqualTo: widget.proList['subcateg'])
       .snapshots();
 
-  late var existingItemWishlist = context
-      .read<Wishlist>()
-      .getWishItems
-      .firstWhereOrNull(
-          (product) => product.documentId == widget.proList['prodid']);
-
-  late var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull(
-      (product) => product.documentId == widget.proList['prodid']);
-
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
   late List<dynamic> imagesList = widget.proList['proimages'];
 
   @override
   Widget build(BuildContext context) {
+    var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull(
+        (product) => product.documentId == widget.proList['prodid']);
     return Material(
       child: SafeArea(
         child: ScaffoldMessenger(
@@ -150,6 +144,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       IconButton(
                         onPressed: () {
+                          var existingItemWishlist = context
+                              .read<Wishlist>()
+                              .getWishItems
+                              .firstWhereOrNull((product) =>
+                                  product.documentId ==
+                                  widget.proList['prodid']);
                           existingItemWishlist != null
                               ? context
                                   .read<Wishlist>()
@@ -283,16 +283,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           back: AppBarBackButton(),
                                         )));
                           },
-                          icon: const Icon(Icons.shopping_cart)),
+                          icon: badges.Badge(
+                              showBadge: context.read<Cart>().getItems.isEmpty
+                                  ? false
+                                  : true,
+                              badgeStyle: const badges.BadgeStyle(
+                                  badgeColor: Colors.redAccent),
+                              badgeContent: Text(
+                                context
+                                    .watch<Cart>()
+                                    .getItems
+                                    .length
+                                    .toString(),
+                                style: const TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w600),
+                              ),
+                              child: const Icon(Icons.shopping_cart))),
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: YellowButton(
-                      label: 'ADD TO CART',
+                      label: existingItemCart != null
+                          ? 'added to cart'
+                          : 'ADD TO CART',
                       onPressed: () {
                         //--- CHECK APAKAH PRODUK SUDAH TERDAPAT DIDALAM CART --//
+
                         existingItemCart != null
                             ? MyMessageHandler.showSnackbar(
                                 _scaffoldKey, 'Your item already in cart')
@@ -329,7 +347,7 @@ class ProductDetailHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(
-            height: 40,
+            height: 30,
             width: 50,
             child: Divider(
               color: Colors.pinkAccent,
