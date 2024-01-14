@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:miniso_store/minor_screen/payment_screen.dart';
 import 'package:miniso_store/providers/cart_provider.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
 import 'package:miniso_store/widgets/yellow_button.dart';
@@ -19,6 +20,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double totalPrice = context.watch<Cart>().totalPrice;
     return FutureBuilder<DocumentSnapshot>(
         //--- CHECKING APABILA GUEST DAN USER LOGIN PADA APLIKASI -------//
         future: customers.doc(FirebaseAuth.instance.currentUser!.uid).get(),
@@ -193,7 +195,15 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: YellowButton(
-                          label: 'Confirm Payment', onPressed: () {}, width: 1),
+                          label: 'Confirm ${totalPrice.toStringAsFixed(2)} USD',
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PaymentScreen()));
+                          },
+                          width: 1),
                     ),
                   ),
                 ),
