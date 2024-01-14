@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:miniso_store/main_screen/dashboard.dart';
 import 'package:miniso_store/providers/cart_provider.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
 import 'package:miniso_store/widgets/yellow_button.dart';
@@ -14,6 +16,7 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PlaceOrderScreenState extends State<PaymentScreen> {
+  int selectedValue = 1;
   CollectionReference customers =
       FirebaseFirestore.instance.collection('customer');
 
@@ -137,6 +140,77 @@ class _PlaceOrderScreenState extends State<PaymentScreen> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15)),
+                            child: Column(
+                              children: [
+                                //----- RADIO LISTTILE PAYMENT METHOD --------//
+                                RadioListTile(
+                                  value: 1,
+                                  groupValue: selectedValue,
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      selectedValue = value!;
+                                    });
+                                  },
+                                  title: const Text('Cash On Delivery'),
+                                  subtitle: const Text('Pay Cash At Home'),
+                                ),
+                                RadioListTile(
+                                    value: 2,
+                                    groupValue: selectedValue,
+                                    onChanged: (int? value) {
+                                      setState(() {
+                                        selectedValue = value!;
+                                      });
+                                    },
+                                    title: const Text('Pay Via Mobile Banking'),
+                                    subtitle: const Row(
+                                      children: [
+                                        Icon(
+                                          Icons.payment_outlined,
+                                          color: Colors.pinkAccent,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 15),
+                                          child: Icon(
+                                            FontAwesomeIcons.ccMastercard,
+                                            color: Colors.pinkAccent,
+                                          ),
+                                        ),
+                                        Icon(
+                                          FontAwesomeIcons.ccVisa,
+                                          color: Colors.pinkAccent,
+                                        )
+                                      ],
+                                    )),
+                                RadioListTile(
+                                  value: 3,
+                                  groupValue: selectedValue,
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      selectedValue = value!;
+                                    });
+                                  },
+                                  title: const Text('Pay Via Gopay'),
+                                  subtitle: const Row(
+                                    children: [
+                                      Icon(
+                                        FontAwesomeIcons.paypal,
+                                        color: Colors.pinkAccent,
+                                      ),
+                                      SizedBox(
+                                        width: 50,
+                                      ),
+                                      Icon(
+                                        FontAwesomeIcons.ccPaypal,
+                                        color: Colors.pinkAccent,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                //========== ENDS OF RADIOLISTILE ============//
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -148,7 +222,9 @@ class _PlaceOrderScreenState extends State<PaymentScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: YellowButton(
                           label: 'Confirm ${totalPaid.toStringAsFixed(2)} USD',
-                          onPressed: () {},
+                          onPressed: () {
+                            print(selectedValue);
+                          },
                           width: 1),
                     ),
                   ),
