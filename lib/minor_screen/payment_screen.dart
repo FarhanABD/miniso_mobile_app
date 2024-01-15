@@ -8,6 +8,7 @@ import 'package:miniso_store/widgets/appbar_widget.dart';
 import 'package:miniso_store/widgets/pink_button.dart';
 import 'package:miniso_store/widgets/yellow_button.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PlaceOrderScreenState extends State<PaymentScreen> {
   int selectedValue = 1;
+  late String orderId;
   CollectionReference customers =
       FirebaseFirestore.instance.collection('customer');
 
@@ -247,7 +249,49 @@ class _PlaceOrderScreenState extends State<PaymentScreen> {
                                               PinkButton(
                                                   label:
                                                       'Confirm ${totalPaid.toStringAsFixed(2)} \$',
-                                                  onPressed: () {},
+                                                  onPressed: () async {
+                                                    for (var item in context
+                                                        .read<Cart>()
+                                                        .getItems) {
+                                                      CollectionReference
+                                                          orderRef =
+                                                          FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'orders');
+                                                      orderId =
+                                                          const Uuid().v4();
+                                                      await orderRef
+                                                          .doc(orderId)
+                                                          .set({
+                                                        'cid': data['cid'],
+                                                        'custname':
+                                                            data['name'],
+                                                        'email': data['email'],
+                                                        'address':
+                                                            data['address'],
+                                                        'phone': data['phone'],
+                                                        'profileimage': data[
+                                                            'profileimage'],
+                                                        'sid': item.suppId,
+                                                        'proid':
+                                                            item.documentId,
+                                                        'orderid': orderId,
+                                                        'orderimage': item
+                                                            .imagesUrl.first,
+                                                        'orderqty': item.qty,
+                                                        'orderprce': item.qty *
+                                                            item.price,
+                                                        'delivery': 'packing',
+                                                        'deliverydate': '',
+                                                        'orderdate':
+                                                            DateTime.now(),
+                                                        'paymentstatus':
+                                                            'Cash On Delivery',
+                                                        'orderreview': false,
+                                                      });
+                                                    }
+                                                  },
                                                   width: 0.9)
                                             ],
                                           ),
