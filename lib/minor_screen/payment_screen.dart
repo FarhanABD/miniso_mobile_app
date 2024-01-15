@@ -289,8 +289,41 @@ class _PlaceOrderScreenState extends State<PaymentScreen> {
                                                         'paymentstatus':
                                                             'Cash On Delivery',
                                                         'orderreview': false,
+                                                      }).whenComplete(() async {
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .runTransaction(
+                                                                (transaction) async {
+                                                          DocumentReference
+                                                              documentReference =
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'products')
+                                                                  .doc(item
+                                                                      .documentId);
+                                                          DocumentSnapshot
+                                                              snapshot2 =
+                                                              await transaction.get(
+                                                                  documentReference);
+                                                          transaction.update(
+                                                              documentReference,
+                                                              {
+                                                                'instock':
+                                                                    snapshot2[
+                                                                            'instock'] -
+                                                                        item.qty
+                                                              });
+                                                        });
                                                       });
                                                     }
+                                                    context
+                                                        .read<Cart>()
+                                                        .clearCart();
+                                                    Navigator.popUntil(
+                                                        context,
+                                                        ModalRoute.withName(
+                                                            '/customer_home'));
                                                   },
                                                   width: 0.9)
                                             ],
