@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miniso_store/main_screen/dashboard.dart';
 import 'package:miniso_store/providers/cart_provider.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
+import 'package:miniso_store/widgets/pink_button.dart';
 import 'package:miniso_store/widgets/yellow_button.dart';
 import 'package:provider/provider.dart';
 
@@ -224,7 +225,39 @@ class _PlaceOrderScreenState extends State<PaymentScreen> {
                       child: YellowButton(
                           label: 'Confirm ${totalPaid.toStringAsFixed(2)} USD',
                           onPressed: () {
-                            print(selectedValue);
+                            if (selectedValue == 1) {
+                              showBottomSheet(
+                                  context: context,
+                                  builder: (context) => SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.3,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 100),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text(
+                                                'Pay At Home ${totalPaid.toStringAsFixed(2)} \$',
+                                                style: const TextStyle(
+                                                    fontSize: 24),
+                                              ),
+                                              PinkButton(
+                                                  label:
+                                                      'Confirm ${totalPaid.toStringAsFixed(2)} \$',
+                                                  onPressed: () {},
+                                                  width: 0.9)
+                                            ],
+                                          ),
+                                        ),
+                                      ));
+                            } else if (selectedValue == 2) {
+                              print('M bangking');
+                            } else if (selectedValue == 3) {
+                              print('Gopay');
+                            }
                           },
                           width: 1),
                     ),
