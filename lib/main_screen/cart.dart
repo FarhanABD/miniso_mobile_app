@@ -78,31 +78,40 @@ class _CartScreenState extends State<CartScreen> {
                     Text(
                       total.toStringAsFixed(2),
                       style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     ),
                   ],
                 ),
-                Container(
-                  height: 35,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: Colors.pinkAccent,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: MaterialButton(
-                    onPressed: total == 0.0
-                        ? null
-                        : () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const PlaceOrderScreen(),
-                                ));
-                          },
+                Flexible(
+                  child: Container(
+                    height: 35,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: Colors.pinkAccent,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: MaterialButton(
+                      child: Text(
+                        'Check Out',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                      onPressed: total == 0.0
+                          ? null
+                          : () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PlaceOrderScreen(),
+                                  ));
+                            },
+                    ),
                   ),
-                )
+                ),
                 // YellowButton(
                 //   width: 0.45,
                 //   label: "CHECK OUT",

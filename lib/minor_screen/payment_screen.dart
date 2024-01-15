@@ -49,13 +49,13 @@ class _PlaceOrderScreenState extends State<PaymentScreen> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Material(
-              color: Colors.grey.shade200,
+              color: Colors.pink.shade100,
               child: SafeArea(
                 child: Scaffold(
-                  backgroundColor: Colors.grey.shade200,
+                  backgroundColor: Colors.pink.shade100,
                   appBar: AppBar(
                     elevation: 0,
-                    backgroundColor: Colors.grey.shade200,
+                    backgroundColor: Colors.pink.shade100,
                     leading: const AppBarBackButton(),
                     title: const AppBarTitle(title: 'Payment'),
                   ),
@@ -112,6 +112,7 @@ class _PlaceOrderScreenState extends State<PaymentScreen> {
                                     ),
                                   ],
                                 ),
+                                //----------------- ROW ONGKIR ---------------//
                                 const Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,

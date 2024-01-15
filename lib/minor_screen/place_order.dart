@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:miniso_store/minor_screen/payment_screen.dart';
 import 'package:miniso_store/providers/cart_provider.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
-import 'package:miniso_store/widgets/yellow_button.dart';
+import 'package:miniso_store/widgets/pink_button.dart';
 import 'package:provider/provider.dart';
 
 class PlaceOrderScreen extends StatefulWidget {
@@ -46,13 +46,13 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Material(
-              color: Colors.grey.shade200,
+              color: Colors.pink.shade100,
               child: SafeArea(
                 child: Scaffold(
-                  backgroundColor: Colors.grey.shade200,
+                  backgroundColor: Colors.pink.shade100,
                   appBar: AppBar(
                     elevation: 0,
-                    backgroundColor: Colors.grey.shade200,
+                    backgroundColor: Colors.pinkAccent.shade100,
                     leading: const AppBarBackButton(),
                     title: const AppBarTitle(title: 'Place Order'),
                   ),
@@ -75,9 +75,24 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Text('Name: ${data['name']}'),
-                                Text('Phone: ${data['phone']}'),
-                                Text('Address: ${data['address']}'),
+                                Text(
+                                  'Name     : ${data['name']}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                                Text(
+                                  'Phone    : ${data['phone']}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                                Text(
+                                  'Address  : ${data['address']}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
                               ],
                             ),
                           ),
@@ -133,12 +148,11 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                                       maxLines: 2,
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.w600,
-                                                          color: Colors
-                                                              .grey.shade600),
+                                                          color: Colors.pink),
                                                     ),
                                                     Padding(
                                                       padding: const EdgeInsets
@@ -191,10 +205,10 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                     ),
                   ),
                   bottomSheet: Container(
-                    color: Colors.grey.shade200,
+                    color: Colors.pink.shade100,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: YellowButton(
+                      child: PinkButton(
                           label: 'Confirm ${totalPrice.toStringAsFixed(2)} USD',
                           onPressed: () {
                             Navigator.push(
