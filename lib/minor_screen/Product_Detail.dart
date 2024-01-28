@@ -61,7 +61,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     },
                     child: Stack(children: [
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.45,
+                        height: MediaQuery.of(context).size.height * 0.40,
                         child: Swiper(
                             pagination: const SwiperPagination(
                                 builder: SwiperPagination.fraction),
@@ -342,12 +342,12 @@ class ProductDetailHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 50,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(
-            height: 30,
+            height: 15,
             width: 50,
             child: Divider(
               color: Colors.pinkAccent,
