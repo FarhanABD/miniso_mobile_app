@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,7 @@ import 'package:miniso_store/widgets/confirm_button.dart';
 import 'package:miniso_store/widgets/pink_button.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
@@ -22,6 +21,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
   late String orderId;
   CollectionReference customers =
       FirebaseFirestore.instance.collection('customer');
+
+  void showProgress() {
+    ProgressDialog progress = ProgressDialog(context: context);
+    progress.show(
+        max: 100, msg: 'Order In Process', progressBgColor: Colors.redAccent);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -251,6 +256,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                 label:
                                                     'Confirm ${totalPaid.toStringAsFixed(2)} \$',
                                                 onPressed: () async {
+                                                  showProgress();
                                                   for (var item in context
                                                       .read<Cart>()
                                                       .getItems) {

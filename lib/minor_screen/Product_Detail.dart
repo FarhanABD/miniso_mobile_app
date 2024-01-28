@@ -184,12 +184,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ],
                   ),
-                  Text(
-                    (widget.proList['instock'].toString()) +
-                        (' pieces available in stock'),
-                    style:
-                        const TextStyle(fontSize: 16, color: Colors.blueGrey),
-                  ),
+                  widget.proList['instock'] == 0
+                      ? const Text('This Item is out of stock')
+                      : Text(
+                          (widget.proList['instock'].toString()) +
+                              (' pieces available in stock'),
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.blueGrey),
+                        ),
                   const ProductDetailHeader(
                     label: "   Item Description   ",
                   ),
@@ -309,20 +311,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ? 'added to cart'
                           : 'ADD TO CART',
                       onPressed: () {
-                        //--- CHECK APAKAH PRODUK SUDAH TERDAPAT DIDALAM CART --//
-
-                        existingItemCart != null
-                            ? MyMessageHandler.showSnackbar(
-                                _scaffoldKey, 'Your item already in cart')
-                            : context.read<Cart>().addItem(
-                                  widget.proList['productname'],
-                                  widget.proList['price'],
-                                  1,
-                                  widget.proList['instock'],
-                                  widget.proList['proimages'],
-                                  widget.proList['prodid'],
-                                  widget.proList['sid'],
-                                );
+                        //--- CHECK APAKAH STOK PRODUK MASIH ADA  --//
+                        if (widget.proList['instock'] == 0) {
+                          MyMessageHandler.showSnackbar(
+                              _scaffoldKey, 'This item is out of stock');
+                        } else if (existingItemCart != null) {
+                          //--- CHECK APAKAH PRODUK SUDAH TERDAPAT DIDALAM CART --//
+                          MyMessageHandler.showSnackbar(
+                              _scaffoldKey, 'Your item already in cart');
+                        } else {
+                          context.read<Cart>().addItem(
+                                widget.proList['productname'],
+                                widget.proList['price'],
+                                1,
+                                widget.proList['instock'],
+                                widget.proList['proimages'],
+                                widget.proList['prodid'],
+                                widget.proList['sid'],
+                              );
+                        }
                       },
                       width: 0.40),
                 ),
