@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:miniso_store/models/customer_order_model.dart';
 import 'package:miniso_store/widgets/appbar_widget.dart';
 
 class CustomerOrder extends StatelessWidget {
@@ -49,67 +50,8 @@ class CustomerOrder extends StatelessWidget {
           return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                var order = snapshot.data!.docs[index];
-
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.pinkAccent.shade200),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: ExpansionTile(
-                      title: Container(
-                        constraints: BoxConstraints(maxHeight: 80),
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 15),
-                              child: Container(
-                                constraints: const BoxConstraints(
-                                    maxHeight: 80, maxWidth: 80),
-                                child: Image.network(order['orderimage']),
-                              ),
-                            ),
-                            Flexible(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  order['ordername'],
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey.shade600,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(('\$') +
-                                          (order['orderprice']
-                                              .toStringAsFixed(2))),
-                                      Text(('x ') +
-                                          (order['orderqty'].toString())),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ))
-                          ],
-                        ),
-                      ),
-                      subtitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('See More'),
-                          Text(order['deliverystatus'])
-                        ],
-                      ),
-                    ),
-                  ),
+                return CustomerOrderModel(
+                  order: snapshot.data!.docs[index],
                 );
               });
         },
