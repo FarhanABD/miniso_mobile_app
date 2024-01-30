@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class CustomerOrderModel extends StatelessWidget {
+class SupplierOrderModel extends StatelessWidget {
   final dynamic order;
-  const CustomerOrderModel({Key? key, required this.order}) : super(key: key);
+  const SupplierOrderModel({Key? key, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +61,10 @@ class CustomerOrderModel extends StatelessWidget {
           ),
           children: [
             Container(
+              height: 230,
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: order['deliverystatus'] == 'delivered'
-                      ? Colors.pink.shade100
-                      : Colors.grey.shade100,
+                  color: Colors.pink.shade100,
                   borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -119,34 +119,36 @@ class CustomerOrderModel extends StatelessWidget {
                         ),
                       ],
                     ),
-                    order['deliverystatus'] == 'shipping'
-                        ? Text(
-                            ('Estimated Delivery Date: ') +
-                                (order['deliverydate']),
-                            style: const TextStyle(fontSize: 15))
-                        : const Text(''),
-                    order['deliverystatus'] == 'delivered' &&
-                            order['orderreview'] == false
-                        ? TextButton(
-                            onPressed: () {}, child: const Text('Write Review'))
-                        : const Text(''),
-                    order['deliverystatus'] == 'delivered' &&
-                            order['orderreview'] == true
-                        ? const Row(
-                            children: [
-                              Icon(
-                                Icons.check,
-                                color: Colors.red,
-                              ),
-                              Text(
-                                'Review Added',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontStyle: FontStyle.italic),
-                              )
-                            ],
-                          )
-                        : const Text('')
+                    Row(
+                      children: [
+                        const Text(
+                          ('Order Date: '),
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        Text(
+                          (DateFormat('yyyy-MM-dd')
+                              .format(order['orderdate'].toDate())
+                              .toString()),
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.redAccent),
+                        ),
+                      ],
+                    ),
+                    order['deliverystatus'] == 'delivered'
+                        ? const Text('This Order Has Been Delivered')
+                        : Row(children: [
+                            const Text(
+                              ('Change Delivery Status To: '),
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            order['deliverystatus'] == 'preparing'
+                                ? TextButton(
+                                    onPressed: () {},
+                                    child: const Text('shipping ?'))
+                                : TextButton(
+                                    onPressed: () {},
+                                    child: const Text('delivered ?'))
+                          ]),
                   ],
                 ),
               ),
