@@ -49,7 +49,7 @@ class _VisitStoreState extends State<VisitStore> {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
           return Scaffold(
-            backgroundColor: Colors.blueGrey.shade100,
+            backgroundColor: Colors.purple.shade50,
             appBar: AppBar(
               toolbarHeight: 100,
               flexibleSpace: Image.asset(

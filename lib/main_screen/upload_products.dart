@@ -266,8 +266,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   dropdownColor:
                                       const Color.fromARGB(255, 238, 157, 185),
                                   menuMaxHeight: 500,
-                                  disabledHint:
-                                      const Text('select sub category'),
+                                  disabledHint: const Text('sub category'),
                                   value: subCategValue,
                                   items: subCategList
                                       .map<DropdownMenuItem<String>>((value) {
