@@ -32,7 +32,7 @@ class StaticsScreen extends StatelessWidget {
             itemCount += item['orderqty'];
           }
 
-          //----------- FUNCTION UNTUK MENAMPILKA TOTAL PENDAPATAN -----------//
+          //----------- FUNCTION UNTUK MENAMPILKAN TOTAL PENDAPATAN -----------//
           double totalPrice = 0.0;
           for (var item in snapshot.data!.docs) {
             totalPrice += item['orderqty'] * item['orderprice'];
@@ -52,9 +52,20 @@ class StaticsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   StaticsModel(
-                      label: 'sold out', value: snapshot.data!.docs.length),
-                  StaticsModel(label: 'item count', value: itemCount),
-                  StaticsModel(label: 'total balance', value: totalPrice),
+                    label: 'sold out',
+                    value: snapshot.data!.docs.length,
+                    decimal: 0,
+                  ),
+                  StaticsModel(
+                    label: 'item count',
+                    value: itemCount,
+                    decimal: 0,
+                  ),
+                  StaticsModel(
+                    label: 'total balance',
+                    value: totalPrice,
+                    decimal: 2,
+                  ),
                   const SizedBox(
                     height: 20,
                   )
@@ -67,9 +78,15 @@ class StaticsScreen extends StatelessWidget {
 }
 
 class StaticsModel extends StatelessWidget {
+  final int decimal;
   final String label;
   final dynamic value;
-  const StaticsModel({Key? key, required this.label, required this.value})
+
+  const StaticsModel(
+      {Key? key,
+      required this.decimal,
+      required this.label,
+      required this.value})
       : super(key: key);
 
   @override
@@ -98,17 +115,59 @@ class StaticsModel extends StatelessWidget {
               borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(15),
                   bottomRight: Radius.circular(15))),
-          child: Center(
-            child: Text(value.toString(),
+          child: AnimatedCounter(
+            incomeCount: value,
+            decimal: decimal,
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class AnimatedCounter extends StatefulWidget {
+  final int decimal;
+  final dynamic incomeCount;
+  const AnimatedCounter(
+      {Key? key, required this.decimal, required this.incomeCount})
+      : super(key: key);
+
+  @override
+  State<AnimatedCounter> createState() => _AnimatedCounterState();
+}
+
+class _AnimatedCounterState extends State<AnimatedCounter>
+    with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation _animation;
+
+  @override
+  void initState() {
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _animation = _controller;
+    setState(() {
+      _animation = Tween(begin: _animation.value, end: widget.incomeCount)
+          .animate(_controller);
+    });
+    _controller.forward();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return Center(
+            child: Text(_animation.value.toStringAsFixed(widget.decimal),
                 style: const TextStyle(
                     color: Colors.pink,
                     fontSize: 24,
                     fontFamily: 'Acme',
                     letterSpacing: 2,
                     fontWeight: FontWeight.bold)),
-          ),
-        )
-      ],
-    );
+          );
+        });
   }
 }
