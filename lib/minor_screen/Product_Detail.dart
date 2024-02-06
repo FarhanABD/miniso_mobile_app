@@ -40,6 +40,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var onSale = widget.proList['discount'];
     var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull(
         (product) => product.documentId == widget.proList['prodid']);
     return Material(
@@ -126,19 +127,43 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       Row(
                         children: [
-                          const Text(
-                            '   USD ',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(
-                            widget.proList['price'].toStringAsFixed(2),
-                            style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
+                          Row(
+                            children: [
+                              const Text(
+                                'USD ',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                widget.proList['price'].toStringAsFixed(2),
+                                style: onSale != 0
+                                    ? const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                        decoration: TextDecoration.lineThrough,
+                                        fontWeight: FontWeight.w600)
+                                    : const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              onSale != 0
+                                  ? Text(
+                                      ((1 - (onSale / 100)) *
+                                              widget.proList['price'])
+                                          .toStringAsFixed(2),
+                                      style: const TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
+                                    )
+                                  : const Text('')
+                            ],
                           ),
                         ],
                       ),
