@@ -130,7 +130,12 @@ class _ProductcardModelState extends State<ProductcardModel> {
                                                 widget.products['prodid'])
                                         : context.read<Wishlist>().addWishItem(
                                               widget.products['productname'],
-                                              widget.products['price'],
+                                              onSale != 0
+                                                  ? ((1 - (onSale / 100)) *
+                                                          widget.products[
+                                                              'price'])
+                                                      .toStringAsFixed(2)
+                                                  : widget.products['price'],
                                               1,
                                               widget.products['instock'],
                                               widget.products['proimages'],
