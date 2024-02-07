@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:miniso_store/minor_screen/Product_Detail.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -81,8 +82,82 @@ class _SearchScreenState extends State<SearchScreen> {
                       e['proname'.toLowerCase()]
                           .contains(searchInput.toLowerCase()));
                   return ListView(
-                    children: results.map((e) => Text(e['proname'])).toList(),
+                    children: results.map((e) => SearchModel(e: e)).toList(),
                   );
                 }));
+  }
+}
+
+class SearchModel extends StatelessWidget {
+  final dynamic e;
+  const SearchModel({
+    Key? key,
+    required this.e,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductDetailScreen(proList: e),
+            ));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          height: 100,
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Image(
+                      image: NetworkImage(e['proimage'][0]),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Flexible(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      e['proname'],
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      e['prodesc'],
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    )
+                  ],
+                ))
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
