@@ -14,9 +14,10 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey.shade300,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.grey.shade300,
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios_new,
@@ -27,6 +28,8 @@ class _SearchScreenState extends State<SearchScreen> {
             },
           ),
           title: CupertinoSearchTextField(
+            autofocus: true,
+            backgroundColor: Colors.white,
             onChanged: (value) {
               setState(() {
                 searchInput = value;
@@ -34,25 +37,52 @@ class _SearchScreenState extends State<SearchScreen> {
             },
           ),
         ),
-        body: StreamBuilder<QuerySnapshot>(
-            stream:
-                FirebaseFirestore.instance.collection('products').snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Material(
-                  child: Center(
-                    child: CircularProgressIndicator(),
+        body: searchInput == ""
+            ? Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.pink.shade200,
+                      borderRadius: BorderRadius.circular(25)),
+                  height: 30,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Text(
+                        'Search for anything',
+                        style: TextStyle(color: Colors.grey),
+                      )
+                    ],
                   ),
-                );
-              }
+                ),
+              )
+            : StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('products')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Material(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
 
-              final results = snapshot.data!.docs.where((e) =>
-                  e['proname'.toLowerCase()]
-                      .contains(searchInput.toLowerCase()));
-              return ListView(
-                children: results.map((e) => Text(e['proname'])).toList(),
-              );
-            }));
+                  final results = snapshot.data!.docs.where((e) =>
+                      e['proname'.toLowerCase()]
+                          .contains(searchInput.toLowerCase()));
+                  return ListView(
+                    children: results.map((e) => Text(e['proname'])).toList(),
+                  );
+                }));
   }
 }
