@@ -1,9 +1,6 @@
-// ignore_for_file: duplicate_import
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniso_store/widgets/auth_widgets.dart';
-import 'package:miniso_store/widgets/snackbar.dart';
 import 'package:miniso_store/widgets/snackbar.dart';
 
 class CustomerLogin extends StatefulWidget {
@@ -24,6 +21,9 @@ class _CustomerLoginState extends State<CustomerLogin> {
 
   //-------------- BOOLEAN WIDGET FOR VISIBILITY OF PASSWORD -----------------//
   bool passwordVisible = false;
+  void Navigate() {
+    Navigator.pushReplacementNamed(context, '/customer_home');
+  }
 
   //--------------- FUNCTION SIGN UP ----------------------------------------//
   void Login() async {
@@ -36,8 +36,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
         formkey.currentState!.reset();
-
-        Navigator.pushReplacementNamed(context, '/customer_home');
+        Navigate();
       } on FirebaseAuthException
       //------------ CATCH BLOK UNTUK ERROR MESSAGE EMAIL TERDAFTAR --------//
       catch (e) {

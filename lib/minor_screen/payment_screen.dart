@@ -9,6 +9,7 @@ import 'package:miniso_store/widgets/pink_button.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
@@ -319,13 +320,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                       });
                                                     });
                                                   }
-                                                  context
-                                                      .read<Cart>()
-                                                      .clearCart();
-                                                  Navigator.popUntil(
-                                                      context,
-                                                      ModalRoute.withName(
-                                                          '/customer_home'));
+                                                  await Future.delayed(
+                                                          const Duration(
+                                                              microseconds:
+                                                                  100))
+                                                      .whenComplete(() {
+                                                    context
+                                                        .read<Cart>()
+                                                        .clearCart();
+                                                    Navigator.popUntil(
+                                                        context,
+                                                        ModalRoute.withName(
+                                                            '/customer_home'));
+                                                  });
                                                 },
                                                 width: 0.9)
                                           ],

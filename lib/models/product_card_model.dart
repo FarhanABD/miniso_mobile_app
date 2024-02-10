@@ -83,7 +83,7 @@ class _ProductcardModelState extends State<ProductcardModel> {
                                 style: onSale != 0
                                     ? const TextStyle(
                                         color: Colors.grey,
-                                        fontSize: 12,
+                                        fontSize: 11,
                                         decoration: TextDecoration.lineThrough,
                                         fontWeight: FontWeight.w600)
                                     : const TextStyle(
@@ -92,7 +92,7 @@ class _ProductcardModelState extends State<ProductcardModel> {
                                         fontWeight: FontWeight.w600),
                               ),
                               const SizedBox(
-                                width: 6,
+                                width: 4,
                               ),
                               onSale != 0
                                   ? Text(
@@ -109,12 +109,15 @@ class _ProductcardModelState extends State<ProductcardModel> {
                           ),
                           widget.products['sid'] ==
                                   FirebaseAuth.instance.currentUser!.uid
-                              ? IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    color: Colors.red,
-                                  ))
+                              ? Flexible(
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        size: 25,
+                                        color: Colors.red,
+                                      )),
+                                )
                               : IconButton(
                                   onPressed: () {
                                     var existingItemWishlist = context
@@ -153,12 +156,12 @@ class _ProductcardModelState extends State<ProductcardModel> {
                                       ? const Icon(
                                           Icons.favorite,
                                           color: Colors.red,
-                                          size: 30,
+                                          size: 25,
                                         )
                                       : const Icon(
                                           Icons.favorite_outline,
                                           color: Colors.red,
-                                          size: 30,
+                                          size: 25,
                                         ),
                                 ),
                         ],
@@ -182,7 +185,10 @@ class _ProductcardModelState extends State<ProductcardModel> {
                             topRight: Radius.circular(15),
                             bottomRight: Radius.circular(15))),
                     child: Center(
-                      child: Text('Save ${onSale['discount'].toString()} %'),
+                      child: Text(
+                        'Save ${onSale.toString()} %',
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                 )

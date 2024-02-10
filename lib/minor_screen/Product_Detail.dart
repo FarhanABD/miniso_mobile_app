@@ -129,12 +129,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         children: [
                           Row(
                             children: [
-                              const Text(
-                                'USD ',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 12),
+                                child: Text(
+                                  'USD ',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
                               Text(
                                 widget.proList['price'].toStringAsFixed(2),
@@ -146,7 +149,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         fontWeight: FontWeight.w600)
                                     : const TextStyle(
                                         color: Colors.red,
-                                        fontSize: 20,
+                                        fontSize: 24,
                                         fontWeight: FontWeight.w600),
                               ),
                               const SizedBox(
@@ -159,7 +162,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           .toStringAsFixed(2),
                                       style: const TextStyle(
                                           color: Colors.red,
-                                          fontSize: 16,
+                                          fontSize: 24,
                                           fontWeight: FontWeight.w600),
                                     )
                                   : const Text('')

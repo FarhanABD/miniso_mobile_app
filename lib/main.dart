@@ -9,10 +9,18 @@ import 'package:miniso_store/main_screen/supplier_home.dart';
 import 'package:miniso_store/main_screen/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:miniso_store/providers/cart_provider.dart';
+import 'package:miniso_store/providers/stripe_id.dart';
 import 'package:miniso_store/providers/wishlist_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublishKey;
+  Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
+  Stripe.urlScheme = 'flutterstripe';
+  await Stripe.instance.applySettings();
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MultiProvider(providers: [
